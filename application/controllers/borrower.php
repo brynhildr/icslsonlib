@@ -4,7 +4,6 @@ class Borrower extends CI_Controller{
 	public function Borrower(){
 		parent::__construct();
 		$this->load->model('user_model');
-		$this->load->library('session');
 		$this->load->helper('url');
 		$this->load->helper('form');
 	}

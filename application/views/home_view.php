@@ -41,7 +41,49 @@
 				</a>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
-				<div id="nav-in">
+        <?php if($this->session->userdata('userType') == 'L') { ?>
+        <div id="nav-in">
+            <div class="navbar-collapse collapse">
+	            <ul class="nav nav-pills">
+	                <li class="active">
+		                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> name_of_librarian <b class="caret"></b></a>
+		                <ul class="dropdown-menu">
+		                    <li><a href="#">View Profile</a></li>
+		                    <li><a href="#">View Student/Faculty</a></li>
+		                    <li><a href="<?=base_url().'index.php/librarian/search_reference_index'?>">Search References</a></li>
+		                    <li class="dropdown-submenu">
+		                    <a tabindex="-1" href="#">Add Reference</a>
+		                        <ul class="dropdown-menu">
+		                            <li> <a href="<?= site_url('librarian/add_reference') ?>">Add Reference</a></li>
+		                            <li><a href="<?= site_url('librarian/file_upload') ?>">File Upload</a></li>
+		                        </ul>
+		                    </li>
+		                  	<li><a href="<?=base_url().'index.php/librarian/add_reference_index'?>">Add Reference</a></li>
+		                  	<li><a href="<?=base_url().'index.php/librarian/view_report_index'?>">Generate Report</a></li>
+		                  	<li><a href="<?=base_url().'index.php/logout'?>">Logout</a></li>
+		                </ul>
+	                </li>
+	            </ul>
+            </div>     
+        </div>
+        <?php }else if($this->session->userdata('userType') == 'S' || $this->session->userdata('userType') == 'F') { ?>
+        <div id="nav-in">
+            <div class="navbar-collapse collapse">
+	            <ul class="nav nav-pills">
+	              <li class="active">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->session->userdata('username')?><b class="caret"></b></a>
+	                <ul class="dropdown-menu">
+	                  <li><a href="<?=base_url().'index.php/borrower/view_borrower_profile_index'?>">View Profile</a></li>
+	                  <li><a href="#">Search References</a></li>
+	                  <li><a href="#">View Cart</a></li>
+	                  <li><a href="<?=base_url().'index.php/logout'?>">Logout</a></li>
+	                </ul>
+	              </li>
+	            </ul>
+            </div>     
+        </div>
+        <?php }else{ ?>
+		 	<div id="nav-in">
 					<form class="navbar-form navbar-left nav-in-search" role="search">
 						<div class="form-group">
 							<input type="text" class="form-control" placeholder="Search">
@@ -129,6 +171,7 @@
 						</div>
 					</div>
 				</div>
+        <?php } ?>
 			</div>
 		</div>
 	</div><!--navbar-fixed-top-->
@@ -181,9 +224,9 @@
 	
 		<div id="right">
 			<div class="container" id="signin">
-				<form class="form-signin" role="form">
-					<input type="text" class="form-control" placeholder="Username">
-					<input type="password" class="form-control" placeholder="Password">
+				<form action="<?=base_url().'index.php/login'?>" class="form-signin" role="form" method='post'>
+					<input type="text" name='username' class="form-control" placeholder="Username">
+					<input type="password" name='password' class="form-control" placeholder="Password">
 					<br>
 					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 					<button class="btn btn-sm btn-success btn-block" type="submit">Create Account</button>
