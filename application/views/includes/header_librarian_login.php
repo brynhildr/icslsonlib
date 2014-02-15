@@ -51,14 +51,13 @@
                   <li><a href="#">View Profile</a></li>
                   <li><a href="#">View Student/Faculty</a></li>
                    <li><a href="<?=base_url().'index.php/librarian/search_reference_index'?>">Search References</a></li>
-                   <li class="dropdown-submenu">
+                    <li class="dropdown-submenu">
                     <a tabindex="-1" href="#">Add Reference</a>
-                        <ul class="dropdown-menu">
-                             <li> <a href="<?= site_url('librarian/add_reference') ?>">Add Reference</a></li>
-                             <li><a href="<?= site_url('librarian/file_upload') ?>">File Upload</a></li>
-                        </ul>
-                    </li>
-                  <li><a href="<?=base_url().'index.php/librarian/add_reference_index'?>">Add Reference</a></li>
+                    <ul class="dropdown-menu">
+                     <li> <a tabindex="-1" href="<?= site_url('librarian/add_reference') ?>">Fill Up Add Reference Form</a></li>
+                     <li><a tabindex="-1" href="<?= site_url('librarian/file_upload') ?>">File Upload</a></li>
+                    </ul>
+                  </li>
                   <li><a href="<?=base_url().'index.php/librarian/view_report_index'?>">Generate Report</a></li>
                   <li><a href="<?=base_url().'index.php/logout'?>">Logout</a></li>
                 </ul>

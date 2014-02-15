@@ -44,7 +44,7 @@ class Librarian extends CI_Controller{
 	*/
 	public function search_reference_index(){
 		$data['title'] = "Librarian Search Reference - ICS Library System";
-		$this->load->view('search_reference_view', $data);
+		$this->load->view('search_view', $data);
 	}//end of function search_reference_index
 
 	/* Displays search result based on the search_result function */
@@ -106,7 +106,7 @@ class Librarian extends CI_Controller{
 		$this->pagination->initialize($config);
 
 		//Load the Search View Page
-		$this->load->view('search_reference_view', $data);
+		$this->load->view('search_view', $data);
 		
 	}//end of function display_search_results
 

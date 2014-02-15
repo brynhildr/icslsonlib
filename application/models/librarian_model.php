@@ -186,24 +186,24 @@ class Librarian_model extends CI_Model{
             'FOR_DELETION' => 'F'       
         );
           
-        $this->db->insert('REFERENCE_MATERIAL', $data);
+        $this->db->insert('reference_material', $data);
 
         /*find a more efficient way to do this */
         $this->db->set('isbn', NULL);
         $this->db->where('isbn', '');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
 
         $this->db->set('description', NULL);
         $this->db->where('description', '');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
 
         $this->db->set('publisher', NULL);
         $this->db->where('publisher', '');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
 
         $this->db->set('publication_year', NULL);
         $this->db->where('publication_year', '');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
     }//end of function add_data
 
     /**
@@ -214,25 +214,25 @@ class Librarian_model extends CI_Model{
     */
     public function add_multipleData($data, $count){
         for($i = 0; $i < $count; $i++) {
-            $this->db->insert('REFERENCE_MATERIAL', $data[$i]);
+            $this->db->insert('reference_material', $data[$i]);
         }
 
         /*find a more efficient way to do this */
         $this->db->set('isbn',NULL);
         $this->db->where('isbn','');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
 
         $this->db->set('description',NULL);
         $this->db->where('description','');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
 
         $this->db->set('publisher',NULL);
         $this->db->where('publisher','');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
 
         $this->db->set('publication_year',NULL);
         $this->db->where('publication_year','');
-        $this->db->update('REFERENCE_MATERIAL');
+        $this->db->update('reference_material');
     }//end of function add_multipleData
 
     /**
