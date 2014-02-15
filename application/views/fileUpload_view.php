@@ -1,4 +1,4 @@
-<?php $this->load->view('includes/header_librarian_login'); ?>
+<?php $this->load->view('includes/header'); ?>
 	<div id="content">
 		<h3>Upload a File</h3>
         <div id="fileUploadForm">

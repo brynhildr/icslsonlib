@@ -1,4 +1,4 @@
-<?= $this->load->view('includes/header_librarian_login') ?>
+<?= $this->load->view('includes/header') ?>
 	<div id="content">
 		<div id="librarian">
 
