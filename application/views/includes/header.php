@@ -87,6 +87,25 @@
             </ul>
           </div>     
       </div>
+      <?php }else if($this->session->userdata('userType') == 'S' || $this->session->userdata('userType') == 'F') { ?>
+          <!---start>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="nav-in">
+        
+          <div class="navbar-collapse collapse">
+            <ul class="nav nav-pills">
+              <li class="active">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->session->userdata('username')?><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="<?=base_url().'index.php/borrower/view_borrower_profile_index'?>">View Profile</a></li>
+                  <li><a href="#">Search References</a></li>
+                  <li><a href="#">View Cart</a></li>
+                  <li><a href="<?=base_url().'index.php/logout'?>">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>     
+      </div>
       <?php }else{ ?>
 		 <!---start>
 		  <!-- Collect the nav links, forms, and other content for toggling -->

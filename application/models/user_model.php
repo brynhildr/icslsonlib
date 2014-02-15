@@ -214,8 +214,8 @@ class User_model extends CI_Model{
 	 * @param	id (int), username (string), password (string), college_address (string), email (string), contact number (int)
 	 * @return	none
 	 */
-	public function user_update_profile($id, $username, $password, $college_address, $email_address, $contact_number){
-		$updateArray = array('username' => $username, 'password' => $password, 'college_address' => $college_address, 'email_address' => $email_address, 'contact_number' => $contact_number);
+	public function user_update_profile($id, $username, $password, $college_address, $contact_number){
+		$updateArray = array('username' => $username, 'password' => $password, 'college_address' => $college_address, 'contact_number' => $contact_number);
 				$this->db->where('id', $id);
 				$this->db->update('users', $updateArray);
 	}
