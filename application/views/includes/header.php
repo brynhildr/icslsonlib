@@ -49,10 +49,10 @@
               <li class="active">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> name_of_admin <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">View Profile</a></li>
-                  <li><a href="#">Search Accounts</a></li>
-                  <li><a href="#">Add/Edit Accounts</a></li>
-                  <li><a href="#">Logout</a></li>
+                  <li><?=anchor('administrator/view_user_profile/'.$this->session->userdata('id'), 'View Profile')?></li>
+                  <li><?=anchor('administrator/search_accounts', 'Search Accounts')?></li>
+                  <li><?=anchor('administrator/create_account', 'Add Account')?></li>
+                  <li><?=anchor('logout', 'Logout')?></li>
                 </ul>
               </li>
             </ul>
