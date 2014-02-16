@@ -73,17 +73,17 @@
 						<!-- Creates a checkbox which when checked, will be passed to the controller and model to delete the checked row. Value will vary depending on the account type (Employee/Student). -->
 						<!--Changelog: 2/5 -Used username as value instead.-->
 						<!--Changelog: 2/10 -Used row id (id) as value instead.-->
-						<td><input type='checkbox' name='users[]' value="<?=$account->id?>"/></td>
-						<td><?=$i++ + $offset?></td>
-						<td><?=($account->employee_number != NULL ? $account->employee_number : "--")?>
+						<td class="col-md-4"><input type='checkbox' name='users[]' value="<?=$account->id?>"/></td>
+						<td class="col-md-4"><?=$i++ + $offset?></td>
+						<td class="col-md-4"><?=($account->employee_number != NULL ? $account->employee_number : "--")?>
 						</td>
-						<td><?=($account->student_number != NULL ? $account->student_number : "--")?>
+						<td class="col-md-4"><?=($account->student_number != NULL ? $account->student_number : "--")?>
 						</td>
-						<td><?=$account->username?></td>
-						<td><?=$account->last_name?></td>
-						<td><?=$account->first_name?></td>
-						<td><?=$account->middle_name?></td>
-						<td><?php
+						<td class="col-md-4"><?=$account->username?></td>
+						<td class="col-md-4"><?=$account->last_name?></td>
+						<td class="col-md-4"><?=$account->first_name?></td>
+						<td class="col-md-4"><?=$account->middle_name?></td>
+						<td class="col-md-4"><?php
 								if($account->user_type == 'A')
 									echo "Administrator";
 								else if($account->user_type == 'L')
@@ -94,7 +94,7 @@
 									echo "Student";
 							?>
 						</td>
-						<td>
+						<td class="col-md-4">
 							<!--Changelog: 2/10 -Used row id (id) for both view and edit account-->
 							<?=anchor('administrator/view_user_profile/'.$account->id, 'View Profile')?>
 							<!--Changelog: 2/5 -Added a Edit Account button for edit_account() method-->
