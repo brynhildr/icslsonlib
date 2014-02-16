@@ -1,4 +1,4 @@
-<?php $this->load->view('includes/header_librarian_login') ?>
+<?php $this->load->view('includes/header') ?>
 		<h3>Add a Reference</h3>
         <div id="addReferenceForm">
             <?= form_open('librarian/add_reference/'); ?>

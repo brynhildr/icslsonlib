@@ -1,4 +1,4 @@
-<?php $this->load->view('includes/header_librarian_login'); ?>
+<?php $this->load->view('includes/header'); ?>
 <div id="content">
 	<div id="left">
 	<div id="carou">
