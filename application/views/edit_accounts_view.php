@@ -55,7 +55,7 @@
 					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#">
-					<img src="<?php echo base_url('img/ics.jpg'); ?>" width="150" height="45" id="logo">
+					<img src="<?php echo base_url('logo.png'); ?>" width="150" height="45" id="logo">
 				</a>
 				<div id="nav-in">
 					<div class="navbar-collapse collapse">
