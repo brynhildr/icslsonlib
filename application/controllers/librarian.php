@@ -58,7 +58,7 @@ class Librarian extends CI_Controller{
 
 		$query_array = array(
 			'category' => $this->input->get('selectCategory'),
-			'text' => htmlspecialchars($this->input->get('inputText')),
+			'text' => htmlspecialchars($this->input->get('inputText'), ENT_QUOTES),
 			'sortCategory' => $this->input->get('selectSortCategory'),
 			'row' => $this->input->get('selectRows'),
 			'accessType' => $this->input->get('selectAccessType'),
@@ -167,14 +167,24 @@ class Librarian extends CI_Controller{
 		//Filter the user's input of HTML special symbols
 		$title = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('title'))));
 		$author = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('author'))));
-		$isbn = $this->input->post('isbn');
-		$category = $this->input->post('category');
+		$isbn = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('isbn'))));
+		$category = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('category'))));
 		$publisher = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('publisher'))));
-		$publication_year = $this->input->post('publication_year');
-		$access_type = $this->input->post('access_type');
-		$course_code = $this->input->post('course_code');
+		$publication_year = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('publication_year'))));
+		$access_type = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('access_type'))));
+		$course_code = htmlspecialchars(mysql_real_escape_string($this->input->post('course_code')));
 		$description = htmlspecialchars(mysql_real_escape_string(trim($this->input->post('description'))));
-		$total_stock = $this->input->post('total_stock');
+		$total_stock = htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock')));
+
+		//DO NOT TRUST the user's input. Server-side input validation
+		if($total_stock <= 0)
+			redirect('librarian/edit_reference_index/' . $id);			
+		if(! in_array(strtoupper($category), array('B', 'S', 'C', 'J', 'M', 'T')))
+			redirect('librarian/edit_reference_index/' . $id);
+		if(! (intval($publication_year) >= 1000 AND intval($publication_year) <= date('Y')))
+			redirect('librarian/edit_reference_index/' . $id);
+		//if(preg_match("\A[A-Z]{2,3}\d{2,3}\z", $course_code) === FALSE)
+		//	redirect('librarian/edit_reference_index/' . $id);
 
 		//Store the input from user to be passed on the model
 	    $query_array = array(
@@ -192,7 +202,7 @@ class Librarian extends CI_Controller{
 	    );
 
 	    $result = $this->librarian_model->edit_reference($query_array);
-	    redirect('librarian');
+	    redirect('librarian/view_reference/' . $id);
 	}//end of function edit_reference
 
 	/* ******************** END OF EDIT REFERENCE MODULE ******************** */
