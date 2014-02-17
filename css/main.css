@@ -184,3 +184,8 @@ width:70em;
 	background-color:RGB(0,73,112);
 	color:white;
 }
+
+/*  Overriding form-inline from bootstrap */
+.form-inline{
+  padding-left:1em;
+}
