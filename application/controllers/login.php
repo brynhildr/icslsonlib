@@ -11,8 +11,8 @@ class Login extends CI_Controller{
 			$password = "";
 		}
 		else{
-			$username = $_POST["username"];
-			$password = md5($_POST["password"]);
+			$username = mysql_real_escape_string($_POST["username"]);
+			$password = mysql_real_escape_string(md5($_POST["password"]));
 		}
 		
 		//Checks if the user is registered
