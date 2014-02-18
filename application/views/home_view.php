@@ -248,15 +248,15 @@
 	          		<div class="row">
 	          			<div class="form-inline">
 							<div class="form-group">
-								<input type="text" class="form-control" id="first_name" name = "first_name" pattern = "[A-Za-z]+" placeholder="First Name" required>
+								<input type="text" class="form-control" id="first_name" name = "first_name" pattern = "([A-Za-z]{2,32}\s*)+" placeholder="First Name" required>
 							</div>
 							<div class="form-group">
 								<div class="col-xs-offset-6">
-									<input type="text" class="form-control" id="middle_name" name = "middle_name" placeholder="Middle Name" required>
+									<input type="text" class="form-control" id="middle_name" name = "middle_name" placeholder="Middle Name"　pattern = "[A-Za-z]{1,32}" required>
 								</div>
 							</div>
 							<div class="form-group">
-								<input type="text" class="form-control" id="last_name" name = "last_name" pattern = "[A-Za-z]+" placeholder="Last Name" required> 
+								<input type="text" class="form-control" id="last_name" name = "last_name" pattern = "[A-Za-z\s]+" placeholder="Last Name" required> 
 							</div>
 						</div>
 					</div><br/>
@@ -278,7 +278,7 @@
 						</tr>
 						<tr>
 							<td align="right" class="col-md-4"><label> Contact Number</label> </td>
-							<td><input type="text" class="form-control" id="contact" name = "contact_number" pattern = "[0-9]{11}" placeholder="09XXXXXXXXX" required></td>
+							<td><input type="text" class="form-control" id="contact" name = "contact_number" pattern = "09[0-9]{9}" placeholder="09XXXXXXXXX" required></td>
 						</tr>
 						<tr>
 							<td align="right" class="col-md-4"><label> E-mail Address</label> </td>
@@ -292,8 +292,6 @@
 							<td align="right" class="col-md-4"></br>
 								<select name="user_type" class="form-control typeDropdown">
 									<option value="">Select User Type</option>
-									<option value="A"> Administrator </option>
-									<option value="L"> Librarian </option>
 									<option value="S"> Student </option>
 									<option value="F"> Faculty </option>
 								</select> 
@@ -303,7 +301,7 @@
 						</tr>
 						<tr id="student_number">
 							<td align="right" class="col-md-4"><label> Student No.</label> </td>
-							<td><input type="text" class="form-control"  id="student_number" name="student_number" pattern = "^[0-9]{4}[-]{1}[0-9]{5}$"/></br></td>
+							<td><input type="text" class="form-control"  id="student_number" name="student_number" pattern = "^[0-9]{4}-[0-9]{5}$"/></br></td>
 						</tr>
 						<tr id="employee_number">
 							<td align="right" class="col-md-4"><label> Employee No.</label> </td>
@@ -314,16 +312,16 @@
 							<td>
 								<select name="college" class="form-control collegeDropdown">
 									<option value="">Select College</option>
-									<option value="CA"> Cgriculture </option>
-									<option value="CAS"> CAS </option>
-									<option value="CA-CAS"> CA - CAS</option>
-									<option value="CDC"> CDC </option>
-									<option value="CEM"> CEM </option>
-									<option value="CEAT"> CEAT </option>
-									<option value="CFNR"> CFNR </option>
-									<option value="CHE"> CHE </option>
-									<option value="CVM"> CVM </option>
-									<option value="GS"> GS </option>
+									<option value="CA"> College of Agriculture (CA) </option>
+									<option value="CAS"> College of Arts and Sciences (CAS) </option>
+									<option value="CA-CAS"> College of Agriculture - College of Arts and Sciences (CA - CAS)</option>
+									<option value="CDC"> College of Development Communication (CDC) </option>
+									<option value="CEM"> College of Economics and Management </option>
+									<option value="CEAT"> College of Engineering and Agro-Industrial Technology (CEAT) </option>
+									<option value="CFNR"> College of Forestry and Natural Resources (CFNR) </option>
+									<option value="CHE"> College of Human Ecology (CHE) </option>
+									<option value="CVM"> College of Veterinary Medicine (CVM) </option>
+									<option value="GS"> Graduate School (GS) </option>
 								</select>
 							</td>
 						</tr>

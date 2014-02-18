@@ -90,33 +90,57 @@ class Administrator_model extends CI_Model{
         }
 	}	
 	
-	/* Parameters:
-		a. $employee_no , $last_name , $first_name , $middle_name , $user_type , $username , $password , $college_address , $email_address , $contact -
-			values of the user to be inserted in to the database	
-	
-		Description: Function which inserts the user details in to the database
-		Return value: 1 if successfully inserted the account else 0
-		Created by: Erika Kimhoko, January 29, 2014
+	/**
+	 * Inserts a tuple in the users table based on the data provided by the user given
+	 * that the username OR email address is not yet used in any of the existing accounts
+	 *
+	 * @access 	public
+	 * @param 	int 	$idNumber
+	 *			String 	$last_name
+	 *			String 	$first_name
+	 *			String 	$middle_name
+	 *			char 	$user_type
+	 *			String 	$username
+	 *			String 	$password
+	 *			String 	$college_address
+	 *			String 	$email_address
+	 *			int 	$contact
+	 *			String 	$college
+	 *			String 	$degree
+	 * @return Boolean 	
+	 * @author Erika Kimhoko, January 29, 2014
+	 * @since February 17, 2014
 	*/
-
-	public function insert_account( $employee_no , $last_name, $first_name , $middle_name,
-			$user_type , $username, $password, $college_address, $email_address ,$contact ){
+	public function insert_account($idNumber, $last_name, $first_name, $middle_name,
+		$user_type, $username, $password, $college_address, $email_address, $contact, $college, $degree){
+	
+		//check if there is already an account with the same username or email address to prevent complications in logging in or emailing an account
+		$name =  $this->db->query("SELECT username FROM users WHERE username = '$username' OR email_address = '$email_address'");
 		
-			//check if there is the same username 
-			//to ensure no duplicates in username to avoid problems in log in
-			$name =  $this->db->query("SELECT username FROM users WHERE username='$username' ");
-			
-			if($name->num_rows() == 0){
-				//insert
+		if($name->num_rows() == 0){
+			//Check user type before executing query
+			if($user_type == 'F'){
 				$this->db->query("INSERT INTO users 
-				(employee_number, last_name, first_name, middle_name, user_type , username, password, college_address, email_address, contact_number) 
+				(employee_number, student_number, last_name, first_name, middle_name, user_type , username, password, college_address, email_address, contact_number, college, degree) 
 				VALUES 
-				('$employee_no' , '$last_name', '$first_name' , '$middle_name','$user_type' , '$username', '$password', '$college_address', '$email_address' ,'$contact')");
-				return 1;
+				('$idNumber', NULL, '$last_name', '$first_name', '$middle_name', '$user_type', '$username', '$password', '$college_address', '$email_address', '$contact', NULL, NULL)");				
 			}
 			else{
-				return 0;
+				$this->db->query("INSERT INTO users 
+				(employee_number, student_number, last_name, first_name, middle_name, user_type , username, password, college_address, email_address, contact_number, college, degree) 
+				VALUES 
+				(NULL, '$idNumber', '$last_name', '$first_name', '$middle_name', '$user_type', '$username', '$password', '$college_address', '$email_address','$contact', '$college', '$degree')");
 			}
+			//Set default values
+			$this->db->query("UPDATE users 
+				SET borrow_limit = 3, waitlist_limit = 5
+				WHERE username = '$username'");
+			return 1;
+			
+		}
+		else{
+			return FALSE;
+		}
 	}
 	
 	/**
