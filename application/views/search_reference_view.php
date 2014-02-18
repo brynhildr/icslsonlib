@@ -1,15 +1,9 @@
-<?= $this->load->view('includes/header_librarian_login') ?>
+<?= $this->load->view('includes/header') ?>
 	
 
 
 	<!-- Form Searching References -->
     
-
-
-
-
-
-
 <br>
 <br>
 
@@ -110,17 +104,17 @@
 		<!-- Form for displaying, deleting, and viewing searched references -->
 		<?php if(isset($references) && $numResults > 0){ ?>
 			<form name = "forms" action = "<?= base_url() . 'index.php/librarian/delete_reference/' ?>" method = "POST">
-				<button type = "button" id = "markAll" value = "markAll">Mark All</button>
-				<input type = "submit" value = "Delete Selected" onclick = "return confirmDelete()" />
-				<br />
-				<center><?= $this->pagination->create_links() ?></center>
+				<div id="paginationStyle"><?= $this->pagination->create_links() ?></div>
 				<table id = 'booktable' border = "1" cellpadding = "5" cellspacing = "2">
 					<thead>
 						<tr>
-							<th></th>
+							<th><button type = "button" class="btn btn-primary"  id = "markAll" value = "markAll"><span class="glyphicon glyphicon-check"></span></button>
+				<button type = "submit" class="btn btn-primary" value = "Delete Selected" onclick = "return confirmDelete()" /> <span class="glyphicon glyphicon-trash"></span> </button>
+				<button type = "submit" class="btn btn-primary" value = "Edit Selected" formaction="<?= base_url() . 'index.php/librarian/edit_reference_index/' ?>" /> <span class="glyphicon glyphicon-edit"></span></button>
+				<br /></th>
 							<th>Row</th>
 							<th>Course Code</th>
-							<th>Title</th>
+							<th><center>Title</center></th>
 							<th>Author/s</th>
 							<th>Reference Type</th>
 							<th>Access Type</th>
@@ -136,7 +130,7 @@
 						$rowID = 1 + $offset;
 						foreach($references as $r): ?>
 							<tr>
-								<td><input type = "checkbox" class = "checkbox" name = "ch[]" value = '<?= $r->id ?>'/></td>
+								<td><center><input type = "checkbox" class = "checkbox" name = "ch[]" value = '<?= $r->id ?>'/></center></td>
 								<td><?= $rowID++ ?></td>
 								<td><?= $r->course_code ?></td>
 								<td><?= (anchor(base_url() . 'index.php/librarian/view_reference/' . $r->id, $r->title)) ?></td>
@@ -181,7 +175,7 @@
 				</table>
 				
       				
-				<center><?= $this->pagination->create_links() ?></center>
+				<div id="paginationStyle"><?= $this->pagination->create_links() ?></div>
 			
 			
 				<?= 'Number of rows retrieved: ' . $total_rows ?>
