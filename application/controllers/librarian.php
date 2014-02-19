@@ -183,8 +183,8 @@ class Librarian extends CI_Controller{
 			redirect('librarian/edit_reference_index/' . $id);
 		if(! (intval($publication_year) >= 1000 AND intval($publication_year) <= date('Y')))
 			redirect('librarian/edit_reference_index/' . $id);
-		//if(preg_match("\A[A-Z]{2,3}\d{2,3}\z", $course_code) === FALSE)
-		//	redirect('librarian/edit_reference_index/' . $id);
+		if(preg_match("/\A[A-Z]{2,3}\d{2,3}\z/", $course_code) === FALSE)
+			redirect('librarian/edit_reference_index/' . $id);
 
 		//Store the input from user to be passed on the model
 	    $query_array = array(
@@ -306,7 +306,52 @@ class Librarian extends CI_Controller{
 		
 
 		if($this->input->post('submit')) {
-		    $this->librarian_model->add_data();
+			$data = array(
+	        	'TITLE' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('title')))),
+	            'AUTHOR' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('author')))),
+	            'ISBN' => htmlspecialchars(mysql_real_escape_string($this->input->post('isbn'))),
+	            'CATEGORY' => htmlspecialchars(mysql_real_escape_string($this->input->post('category'))),
+	            'DESCRIPTION' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('description')))),
+	            'PUBLISHER' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('publisher')))),
+	            'PUBLICATION_YEAR' => htmlspecialchars(mysql_real_escape_string($this->input->post('year'))),
+	            'ACCESS_TYPE' => htmlspecialchars(mysql_real_escape_string($this->input->post('access_type'))),
+	            'COURSE_CODE' => htmlspecialchars(mysql_real_escape_string($this->input->post('course_code'))),
+	            'TOTAL_AVAILABLE' => htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock'))),
+	            'TOTAL_STOCK' => htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock'))),
+	            'TIMES_BORROWED' => '0',
+	            'FOR_DELETION' => 'F'    
+        	);
+
+			//Setting empty fields that can be NULL to NULL
+			if($data['ISBN'] == '')
+				$data['ISBN'] = NULL;
+			if($data['DESCRIPTION'] == '')
+				$data['DESCRIPTION'] = NULL;
+			if($data['PUBLISHER'] == '')
+				$data['PUBLISHER'] = NULL;
+			if($data['PUBLICATION_YEAR'] == '')
+				$data['PUBLICATION_YEAR'] = NULL;
+
+			//Server-side Input validation
+			//Missing not-NULLable data validation
+			if($data['TITLE'] == '' OR $data['AUTHOR'] == '' OR $data['CATEGORY'] == '' OR $data['ACCESS_TYPE'] == '' OR $data['COURSE_CODE'] == '' OR $data['TOTAL_AVAILABLE'] == '')
+				redirect('librarian/add_reference');
+			//Category fixed pre-defined set of values validation
+			if(! in_array($data['CATEGORY'], array('B', 'M', 'S', 'J', 'T', 'C')))
+				redirect('librarian/add_reference');
+			//Access Type fixed pre-defined set of values validation
+			if(! in_array($data['ACCESS_TYPE'], array('S', 'F')))
+				redirect('librarian/add_reference');
+			//Publication Year value validation
+			if($data['PUBLICATION_YEAR'] != '' && (intval($data['PUBLICATION_YEAR']) < 1900 OR intval($data['PUBLICATION_YEAR']) > intval(date('Y'))))
+				redirect('librarian/add_reference');
+			//Total Stock value validation
+			if(intval($data['TOTAL_STOCK']) < 1)
+				redirect('librarian/add_reference');
+			if(preg_match("/\A[A-Z]{2,3}[0-9]{1,3}\z/", $data['COURSE_CODE']) == 0)
+				redirect('librarian/add_reference');
+
+		    $this->librarian_model->add_data($data);
 		    $data['message']= 'You have successfully added a reference material';
 		   $this->load->view("addReference_view", $data);
 		}else{

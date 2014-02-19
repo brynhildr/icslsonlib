@@ -40,7 +40,7 @@
                 </tr>                             
                <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Publication Year</button></td>
-                        <td align="right"> <input name="year" class="form-control"type="number"min="1900" max="2014" id="inputYear" > </td>
+                        <td align="right"> <input name="year" class="form-control"type="number"min="1900" max="<?php echo date('Y'); ?>" id="inputYear" > </td>
                 </tr>
                 <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Access Type</button></td>
@@ -48,7 +48,7 @@
                 </tr>
                <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Course Code</button></td>
-                        <td align="right"> <input name="course_code" class="form-control"type="text" id="inputCoursecode" > </td>
+                        <td align="right"> <input name="course_code" class="form-control"type="text" id="inputCoursecode" pattern = "[A-Z]{2,3}[0-9]{1,3}" required > </td>
                 </tr>
                  <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Total Stock</button></td>

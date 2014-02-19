@@ -168,42 +168,10 @@ class Librarian_model extends CI_Model{
 	 * Adds a reference in the database
 	 *
 	 * @access public
+	 * @param array $data
 	*/
-	function add_data(){
-        $data = array(
-        	'TITLE' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('title')))),
-            'AUTHOR' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('author')))),
-            'ISBN' => $this->input->post('isbn'),
-            'CATEGORY' => $this->input->post('category'),
-            'DESCRIPTION' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('description')))),
-            'PUBLISHER' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('publisher')))),
-            'PUBLICATION_YEAR' => $this->input->post('year'),
-            'ACCESS_TYPE' => $this->input->post('access_type'),
-            'COURSE_CODE' => $this->input->post('course_code'),
-            'TOTAL_AVAILABLE' => $this->input->post('total_stock'),
-            'TOTAL_STOCK' => $this->input->post('total_stock'),
-            'TIMES_BORROWED' => '0',  
-            'FOR_DELETION' => 'F'       
-        );
-          
+	function add_data($data){      
         $this->db->insert('reference_material', $data);
-
-        /*find a more efficient way to do this */
-        $this->db->set('isbn', NULL);
-        $this->db->where('isbn', '');
-        $this->db->update('reference_material');
-
-        $this->db->set('description', NULL);
-        $this->db->where('description', '');
-        $this->db->update('reference_material');
-
-        $this->db->set('publisher', NULL);
-        $this->db->where('publisher', '');
-        $this->db->update('reference_material');
-
-        $this->db->set('publication_year', NULL);
-        $this->db->where('publication_year', '');
-        $this->db->update('reference_material');
     }//end of function add_data
 
     /**
