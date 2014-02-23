@@ -52,7 +52,9 @@
 			<br />
 			<?php echo "For Deletion = $row->for_deletion"; ?>
 			<br />
-			<?= anchor(base_url() . 'index.php/librarian/edit_reference_index/' . $row->id, 'Edit!') ?>			
+			<?= anchor(base_url('index.php/librarian/edit_reference_index/') . $row->id, 'Edit!') ?>
+			<?= anchor(base_url('index.php/librarian/claim_return/' . $row->id . '/C'), 'Claim'); ?>
+			<?= anchor(base_url('index.php/librarian/claim_return/' . $row->id . '/R'), 'Return'); ?>
 	<?php } ?>
 	
 	<?= anchor(base_url() . 'index.php/librarian/', 'Back') ?>

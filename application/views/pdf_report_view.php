@@ -1,8 +1,30 @@
 <?php
-		
-	$pdf = new FPDF();
-	$title = 'OnLib: ICS Library Online System Log';
-	$pdf->SetTitle($title);
+	class PDF extends FPDF{
+		function Header(){
+			// Logo
+		    $this->Image('img/ics_logo.jpg',15,7,-120);
+		    // Arial bold 15
+		    $this->SetFont('Arial','B',15);
+		    // Move to the right
+		    $this->Cell(80);
+		    // Title
+		    $this->Cell(50,25,'OnLib: Institute of Computer Science Library Log',0,1,'C');
+		    // Line break
+		    $this->Ln(20);
+		}
+	}
+	$pdf = new PDF();
+	$pdf->Header();	
+	/*	
+	function Header(){
+		$pdf->Image('ics_logo.jpg',10,6,30);
+		$pdf->SetFont('Arial', 'B',15);
+		$pdf->Cell(70);
+		$pdf->Cell(30,10,'OnLib: Institute of Computer Science Library Log',1,0,'C');
+		$pdf->Ln(20);
+	}
+	
+	$pdf = new FPDF();*/
 	
 	//column headers
 	$header = array('Ref. ID', 'Borrower ID', 'Date Waitlisted', 'Date Reserved', 'Date Borrowed', 'Date Returned');

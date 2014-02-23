@@ -108,9 +108,9 @@
 				<table id = 'booktable' border = "1" cellpadding = "5" cellspacing = "2">
 					<thead>
 						<tr>
-							<th><button type = "button" class="btn btn-primary"  id = "markAll" value = "markAll"><span class="glyphicon glyphicon-check"></span></button>
+							<th><button type = "button" class="btn btn-primary"  id = "markAll" value = "markAll" formaction="<?= base_url() . 'index.php/librarian/claim_return/' ?>" /><span class="glyphicon glyphicon-check"></span></button>
 				<button type = "submit" class="btn btn-primary" value = "Delete Selected" onclick = "return confirmDelete()" /> <span class="glyphicon glyphicon-trash"></span> </button>
-				<button type = "submit" class="btn btn-primary" value = "Edit Selected" formaction="<?= base_url() . 'index.php/librarian/edit_reference_index/' ?>" /> <span class="glyphicon glyphicon-edit"></span></button>
+				<button type = "submit" class="btn btn-primary" value = "Edit Selected" formaction="<?php echo base_url('index.php/librarian/claim_return'); ?>" method="get" /> <span class="glyphicon glyphicon-edit"></span></button>
 				<br /></th>
 							<th>Row</th>
 							<th>Course Code</th>

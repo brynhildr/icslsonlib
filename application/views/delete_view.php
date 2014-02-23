@@ -74,4 +74,5 @@
 <button type="button" id="markAll" value="markAll" >Mark All</button>
 <input type = "Submit" name = "delete" id="delete" value = "Delete selected books" onclick= "confirmDelete()"/>
 </form>
+<script src="<?= base_url('js/delete_script.js') ?>"></script>
 <?= $this->load->view('includes/footer') ?>

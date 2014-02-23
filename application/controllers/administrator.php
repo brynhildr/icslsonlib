@@ -154,41 +154,29 @@ class Administrator extends CI_Controller{
 		-isset function used to check the set fields to know which view to invoke
 		
 	*/
-	/**
-	 * Administrator Module: Creates a unique account based on the data provided by the user
-	 *
-	 * @access public
-	 * @author Erika Kimhoko
-	 * @since February 17, 2014
-	*/
+	
+	//Erika Kimhoko
 	public function create_account(){	
 	
 		if(isset($_POST['submit'])){
-			$employee_no = htmlspecialchars(mysql_real_escape_string($this->input->post('employee_number')));
-			$student_number = htmlspecialchars(mysql_real_escape_string($this->input->post('student_number')));
-			$last_name = htmlspecialchars(mysql_real_escape_string($this->input->post('last_name')));
-			$first_name = htmlspecialchars(mysql_real_escape_string($this->input->post('first_name')));
-			$middle_name = htmlspecialchars(mysql_real_escape_string($this->input->post('middle_name')));
-			$user_type = htmlspecialchars(mysql_real_escape_string($this->input->post('user_type')));
-			$username = htmlspecialchars(mysql_real_escape_string($this->input->post('username')));
-			$password = htmlspecialchars(mysql_real_escape_string(md5($this->input->post('password'))));
-			$college_address = htmlspecialchars(mysql_real_escape_string($this->input->post('college_address')));
-			$email_address = htmlspecialchars(mysql_real_escape_string($this->input->post('email_address')));
-			$contact = htmlspecialchars(mysql_real_escape_string($this->input->post('contact_number')));
-			$college = htmlspecialchars(mysql_real_escape_string($this->input->post('college')));
-			$degree = htmlspecialchars(mysql_real_escape_string($this->input->post('degree')));
+			$employee_no = $_POST["employee_no"];
+			$last_name = $_POST["last_name"];
+			$first_name = $_POST["first_name"];
+			$middle_name = $_POST["middle_name"];
+			$user_type = $_POST["user_type"];
+			$username = $_POST["username"];
+			$password = md5($_POST["password"]);
+			$college_address = $_POST["college_address"];
+			$email_address = $_POST["email_address"];
+			$contact = $_POST["contact"];
 			
-			$idNumber = ($user_type == 'F') ? $employee_no : $student_number;
-
-			//Server-side validation
-			//<Insert validation here...>
-
+			
 			//call the method in the model to insert the data
-			$accountCreated = $this->administrator_model->insert_account($idNumber, $last_name, $first_name, $middle_name,
-				$user_type, $username, $password, $college_address, $email_address, $contact, $college, $degree );
+			$accounts = $this->administrator_model->insert_account( $employee_no , $last_name, $first_name , $middle_name,
+				$user_type , $username, $password, $college_address, $email_address ,$contact );
 				
-			//if database already contains the same username or email call the create view again
-			if($accountCreated === FALSE){
+			//if database already contains the same username call the create view again
+			if($accounts == 0){
 				//data to fill the forms automatically except the username
 				$data['employee_no'] = $employee_no;
 				$data['last_name'] = $last_name;

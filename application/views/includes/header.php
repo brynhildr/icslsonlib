@@ -20,9 +20,9 @@
   
         <link rel="stylesheet" type='text/css' href="<?php echo base_url('css/bootstrap-theme.min.css');?>">
         <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/bootstrap.css');?>">
-       <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/main_login.css');?>">
+       <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/main.css');?>">
         <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/template.css');?>">
-
+        <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/profile_view.css');?>">
         <script src="<?base_url().'js/vendor/modernizr-2.6.2-respond-1.1.0.min.js'?>"></script>
        
     </head>
@@ -31,7 +31,7 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experiensce.</p>
         <![endif]-->
     <div id="wholeSite">
-    <div class="navbar-fixed-top" id="test2">
+    <div class="navbar-fixed-top" id="topbar">
       <div class="container">
         <div class="navbar-header" id="nav-bar">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -97,8 +97,8 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->session->userdata('username')?><b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="<?=base_url().'index.php/borrower/view_borrower_profile_index'?>">View Profile</a></li>
-                  <li><a href="#">Search References</a></li>
-                  <li><a href="#">View Cart</a></li>
+                  <li><a href="<?=base_url().'index.php/search'?>">Search References</a></li>
+                  <li><a href="<?=base_url().'index.php/cart/view_cart'?>">View Cart</a></li>
                   <li><a href="<?=base_url().'index.php/logout'?>">Logout</a></li>
                 </ul>
               </li>
@@ -109,14 +109,18 @@
 		 <!---start>
 		  <!-- Collect the nav links, forms, and other content for toggling -->
 			<div id="nav-in">
-		    <form class="navbar-form navbar-left nav-in-search" role="search">
-		      <div class="form-group">
-		        <input type="text" class="form-control" placeholder="Search">
-		      </div>
-		      <button type="submit" class="btn btn-default">Search</button>
-		      <button type="submit" class="btn btn-default"> Advanced Search</button>
-		    </form>
+        <form class="navbar-form navbar-left nav-in-search" role="search"action="http://localhost/icsls/index.php/search/search_rm" method="get" accept-charset="utf-8">
+         <div class="form-group">
+          <input type="text" name="keyword" placeholder="Search" value=""/>
+           
+          <input class="btn btn-default"type="submit" name="search1" value="Search"/>
+        </form>
+		     <a href="#advanceSearch"data-toggle="modal"> <input type="submit" name="aSearch" class="btn btn-primary"  value="Advanced Search"/></a>
+       </div>
 		    
+ 
+
+        
 			</div>
         <?php } ?>
 		

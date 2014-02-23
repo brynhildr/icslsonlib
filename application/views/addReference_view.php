@@ -1,6 +1,6 @@
 <?php $this->load->view('includes/header') ?>
      
-		<h3>Add References</h3>
+        <h3>Add References</h3>
         <div id="alertmessage"class="alert alert-success"><?=$message?></a></div>
         <div id="addReferenceForm">
             
@@ -40,15 +40,20 @@
                 </tr>                             
                <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Publication Year</button></td>
-                        <td align="right"> <input name="year" class="form-control"type="number"min="1900" max="2014" id="inputYear" > </td>
+                        <td align="right"> <input name="year" class="form-control"type="number"min="1900" max="<?php echo date('Y'); ?>" id="inputYear" > </td>
                 </tr>
                 <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Access Type</button></td>
-                        <td align="right"> <input name="access_type" class="form-control"type="text" id="inputAccess" > </td>
+                        <td align="right">
+                            <select name = "access_type" class = "form-control" id = "inputAccess">
+                                <option value = 'S'>Student</option>
+                                <option value = 'F'>Faculty</option>
+                            </select>
+                        </td>
                 </tr>
                <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Course Code</button></td>
-                        <td align="right"> <input name="course_code" class="form-control"type="text" id="inputCoursecode" > </td>
+                        <td align="right"> <input name="course_code" class="form-control"type="text" id="inputCoursecode" pattern = "[A-Z]{2,3}[0-9]{1,3}" required > </td>
                 </tr>
                  <tr>
                         <td align="right"><button type="button" class="btn btn-primary">Total Stock</button></td>

@@ -1,5 +1,5 @@
 <head>
-<link rel="stylesheet" type="text/css" href="../../css/profile_view.css">
+
 </head>
 <?php $this->load->view('includes/header'); ?>
 <script type="text/javascript">	

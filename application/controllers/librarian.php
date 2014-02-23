@@ -3,8 +3,10 @@
 /**
  * Controller for librarian-specific modules
  *
- * @author Mark Carlo Dela Torre, Angela Roscel Almoro, Jason Faustino, Jay-ar Hernaez
- * @version 1.0
+ * @package 	icsls
+ * @category 	Controller
+ * @author 		Mark Carlo Dela Torre, Angela Roscel Almoro, Jason Faustino, Jay-ar Hernaez
+ * @version 	1.0
 */
 class Librarian extends CI_Controller{
 	/**
@@ -36,7 +38,7 @@ class Librarian extends CI_Controller{
 		$this->load->view('librarian_main_view', $data);
 	}//end of function index
 
-	/* ******************** SEARCH REFERENCE MODULE ******************** */
+	/* **************************************** SEARCH REFERENCE MODULE **************************************** */
 	/**
 	 * Loads the search reference view containing a form and input fields to search references stored in the database
 	 *
@@ -58,7 +60,7 @@ class Librarian extends CI_Controller{
 
 		$query_array = array(
 			'category' => $this->input->get('selectCategory'),
-			'text' => htmlspecialchars($this->input->get('inputText'), ENT_QUOTES),
+			'text' => htmlspecialchars($this->input->get('inputText')),
 			'sortCategory' => $this->input->get('selectSortCategory'),
 			'row' => $this->input->get('selectRows'),
 			'accessType' => $this->input->get('selectAccessType'),
@@ -110,9 +112,9 @@ class Librarian extends CI_Controller{
 		
 	}//end of function display_search_results
 
-	/* ******************** END OF SEARCH REFERENCE MODULE ******************** */
+	/* **************************************** END OF SEARCH REFERENCE MODULE **************************************** */
 
-	/* ******************** VIEW REFERENCE MODULE ******************** */
+	/* **************************************** VIEW REFERENCE MODULE **************************************** */
 	/**
 	 * View a reference specified by its row ID (which is set in the database)
 	 *
@@ -129,9 +131,9 @@ class Librarian extends CI_Controller{
 	    $this->load->view('view_reference_view', $data);
 	}//end of function view_reference
 
-	/* ******************** END OF REFERENCE MODULE ******************** */
+	/* **************************************** END OF REFERENCE MODULE **************************************** */
 
-	/* ******************** EDIT REFERENCE MODULE ******************** */
+	/* **************************************** EDIT REFERENCE MODULE **************************************** */
 
 	/**
 	 * Loads initial state of the reference to be edited
@@ -161,7 +163,7 @@ class Librarian extends CI_Controller{
 		$this->load->helper('text');
 
 		$id = $this->uri->segment(3);
-		if($id === FALSE)
+		if($id === 	FALSE)
 			redirect('librarian');
 
 		//Filter the user's input of HTML special symbols
@@ -177,15 +179,19 @@ class Librarian extends CI_Controller{
 		$total_stock = htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock')));
 
 		//DO NOT TRUST the user's input. Server-side input validation
-		if($total_stock <= 0)
+		/*if($total_stock <= 0)
 			redirect('librarian/edit_reference_index/' . $id);			
 		if(! in_array(strtoupper($category), array('B', 'S', 'C', 'J', 'M', 'T')))
 			redirect('librarian/edit_reference_index/' . $id);
 		if(! (intval($publication_year) >= 1000 AND intval($publication_year) <= date('Y')))
 			redirect('librarian/edit_reference_index/' . $id);
-		//if(preg_match("\A[A-Z]{2,3}\d{2,3}\z", $course_code) === FALSE)
-		//	redirect('librarian/edit_reference_index/' . $id);
+		if(preg_match("/\A[A-Z]{2,3}\d{2,3}\z/", $course_code) === FALSE)
+			redirect('librarian/edit_reference_index/' . $id);
+<<<<<<< HEAD
+		*/
+=======
 
+>>>>>>> 0562ff6da6e8b83710bb98b1d0e4da083abc240c
 		//Store the input from user to be passed on the model
 	    $query_array = array(
 	       	'id' => $id,
@@ -205,26 +211,9 @@ class Librarian extends CI_Controller{
 	    redirect('librarian/view_reference/' . $id);
 	}//end of function edit_reference
 
-	/* ******************** END OF EDIT REFERENCE MODULE ******************** */
+	/* **************************************** END OF EDIT REFERENCE MODULE **************************************** */
 
-	/* ******************** DELETE REFERENCE MODULE ******************** */
-	/*
-	public function delete_ready_reference(){
-		if(!empty($_POST['chch'])):
-			if(count($_POST['chch'])>0):
-				$toDelete = $_POST['chch'];
-				
-				for($i=0;$i< count($toDelete);$i++){
-					$result = $this->librarian_model->delete_references($toDelete[$i]);
-				}
-				 
-			endif;
-		endif;
-		
-		redirect( base_url() . 'index.php/librarian','refresh');
-	}
-	*/
-
+	/* **************************************** DELETE REFERENCE MODULE **************************************** */
 	/**
 	 * Delete selected references specified by its respective checkbox
 	 *
@@ -281,9 +270,9 @@ class Librarian extends CI_Controller{
 		redirect( base_url() . 'index.php/librarian','refresh');
 	}//end of function change_forDeletion
 
-	/* ******************** END OF DELETE REFERENCE MODULE ******************** */
+	/* **************************************** END OF DELETE REFERENCE MODULE **************************************** */
 
-	/* ******************** ADD REFERENCE MODULE ******************** */
+	/* **************************************** ADD REFERENCE MODULE **************************************** */
 
 	/**
 	 * Loads the view for adding references
@@ -303,10 +292,72 @@ class Librarian extends CI_Controller{
 	public function add_reference(){
 		$data['title'] = 'Librarian Add Reference - ICS Library System';
 		$data['message']= '';
-		
 
 		if($this->input->post('submit')) {
-		    $this->librarian_model->add_data();
+			$data = array(
+<<<<<<< HEAD
+	        	'TITLE' => htmlspecialchars(trim($this->input->post('title'))),
+	            'AUTHOR' => htmlspecialchars(trim($this->input->post('author'))),
+	            'ISBN' => htmlspecialchars($this->input->post('isbn')),
+	            'CATEGORY' => htmlspecialchars($this->input->post('category')),
+	            'DESCRIPTION' => htmlspecialchars(trim($this->input->post('description'))),
+	            'PUBLISHER' => htmlspecialchars(trim($this->input->post('publisher'))),
+	            'PUBLICATION_YEAR' => htmlspecialchars($this->input->post('year')),
+	            'ACCESS_TYPE' => htmlspecialchars($this->input->post('access_type')),
+	            'COURSE_CODE' => htmlspecialchars($this->input->post('course_code')),
+	            'TOTAL_STOCK' => htmlspecialchars($this->input->post('total_stock')),
+	            'TIMES_BORROWED' => '0',
+	            'FOR_DELETION' => 'F'    
+        	);
+			$data['TOTAL_AVAILABLE'] = $data['TOTAL_STOCK'];
+			$data['TOTAL_IN_STOCK'] = $data['TOTAL_STOCK'];
+=======
+	        	'TITLE' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('title')))),
+	            'AUTHOR' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('author')))),
+	            'ISBN' => htmlspecialchars(mysql_real_escape_string($this->input->post('isbn'))),
+	            'CATEGORY' => htmlspecialchars(mysql_real_escape_string($this->input->post('category'))),
+	            'DESCRIPTION' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('description')))),
+	            'PUBLISHER' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('publisher')))),
+	            'PUBLICATION_YEAR' => htmlspecialchars(mysql_real_escape_string($this->input->post('year'))),
+	            'ACCESS_TYPE' => htmlspecialchars(mysql_real_escape_string($this->input->post('access_type'))),
+	            'COURSE_CODE' => htmlspecialchars(mysql_real_escape_string($this->input->post('course_code'))),
+	            'TOTAL_AVAILABLE' => htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock'))),
+	            'TOTAL_STOCK' => htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock'))),
+	            'TIMES_BORROWED' => '0',
+	            'FOR_DELETION' => 'F'    
+        	);
+>>>>>>> 0562ff6da6e8b83710bb98b1d0e4da083abc240c
+
+			//Setting empty fields that can be NULL to NULL
+			if($data['ISBN'] == '')
+				$data['ISBN'] = NULL;
+			if($data['DESCRIPTION'] == '')
+				$data['DESCRIPTION'] = NULL;
+			if($data['PUBLISHER'] == '')
+				$data['PUBLISHER'] = NULL;
+			if($data['PUBLICATION_YEAR'] == '')
+				$data['PUBLICATION_YEAR'] = NULL;
+
+			//Server-side Input validation
+			//Missing not-NULLable data validation
+			if($data['TITLE'] == '' OR $data['AUTHOR'] == '' OR $data['CATEGORY'] == '' OR $data['ACCESS_TYPE'] == '' OR $data['COURSE_CODE'] == '' OR $data['TOTAL_AVAILABLE'] == '')
+				redirect('librarian/add_reference');
+			//Category fixed pre-defined set of values validation
+			if(! in_array($data['CATEGORY'], array('B', 'M', 'S', 'J', 'T', 'C')))
+				redirect('librarian/add_reference');
+			//Access Type fixed pre-defined set of values validation
+			if(! in_array($data['ACCESS_TYPE'], array('S', 'F')))
+				redirect('librarian/add_reference');
+			//Publication Year value validation
+			if($data['PUBLICATION_YEAR'] != '' && (intval($data['PUBLICATION_YEAR']) < 1900 OR intval($data['PUBLICATION_YEAR']) > intval(date('Y'))))
+				redirect('librarian/add_reference');
+			//Total Stock value validation
+			if(intval($data['TOTAL_STOCK']) < 1)
+				redirect('librarian/add_reference');
+			if(preg_match("/\A[A-Z]{2,3}[0-9]{1,3}\z/", $data['COURSE_CODE']) == 0)
+				redirect('librarian/add_reference');
+
+		    $this->librarian_model->add_data($data);
 		    $data['message']= 'You have successfully added a reference material';
 		   $this->load->view("addReference_view", $data);
 		}else{
@@ -339,7 +390,7 @@ class Librarian extends CI_Controller{
 				$uploadData = array('upload_data' => $this->upload->data());
 				$filename='./uploads/'.$uploadData['upload_data']['file_name'];
 				$this->load->library('csvreader');
-		        $data['csvData'] = $this->csvreader->parse_file($filename);	
+		        $data['csvData'] = $this->csvreader->parse_file($filename);
 				$this->load->view("uploadSuccess_view", $data);
 			}
 		}
@@ -361,34 +412,45 @@ class Librarian extends CI_Controller{
 
 		    for($i = 0; $i < $count; $i++) {
 				$data[$i] = array(
-					'TITLE' => htmlspecialchars($this->input->post('title' . $i)),
-					'AUTHOR' => htmlspecialchars($this->input->post('author' . $i)),
-					'ISBN' => $this->input->post('isbn' . $i),
-					'CATEGORY' => $this->input->post('category' . $i),
-					'DESCRIPTION' => htmlspecialchars($this->input->post('description' . $i)),
-					'PUBLISHER' => htmlspecialchars($this->input->post('publisher' . $i)),
-					'PUBLICATION_YEAR' => $this->input->post('year' . $i),
-					'ACCESS_TYPE' => $this->input->post('access_type' . $i),
-					'COURSE_CODE' => $this->input->post('course_code' . $i),
-					'TOTAL_AVAILABLE' => $this->input->post('total_stock' . $i),
-					'TOTAL_STOCK' => $this->input->post('total_stock' . $i),
+					'TITLE' => htmlspecialchars(mysql_real_escape_string($this->input->post('title' . $i))),
+					'AUTHOR' => htmlspecialchars(mysql_real_escape_string($this->input->post('author' . $i))),
+					'ISBN' => htmlspecialchars(mysql_real_escape_string($this->input->post('isbn' . $i))),
+					'CATEGORY' => htmlspecialchars(mysql_real_escape_string($this->input->post('category' . $i))),
+					'DESCRIPTION' => htmlspecialchars(mysql_real_escape_string($this->input->post('description' . $i))),
+					'PUBLISHER' => htmlspecialchars(mysql_real_escape_string($this->input->post('publisher' . $i))),
+					'PUBLICATION_YEAR' => htmlspecialchars(mysql_real_escape_string($this->input->post('year' . $i))),
+					'ACCESS_TYPE' => htmlspecialchars(mysql_real_escape_string($this->input->post('access_type' . $i))),
+					'COURSE_CODE' => htmlspecialchars(mysql_real_escape_string($this->input->post('course_code' . $i))),
+					'TOTAL_STOCK' => htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock' . $i))),
 					'TIMES_BORROWED' => '0',
 					'FOR_DELETION' => 'F'    
 				);
+				$data[$i]['TOTAL_AVAILABLE'] = $data[$i]['TOTAL_STOCK'];
+				$data[$i]['TOTAL_IN_STOCK'] = $data[$i]['TOTAL_STOCK'];
 		    }
 
 	    	$this->librarian_model->add_multipleData($data, $count);
-		    redirect('librarian/add_reference_index','refresh');
+		    redirect('librarian/file_upload','refresh');
 		}
 	}//end of function add_multipleReferences
 
-	/* ******************** END OF ADD REFERENCE MODULE ******************** */
+	/* **************************************** END OF ADD REFERENCE MODULE **************************************** */
 
+	/**
+	 * Displays information about the libarian
+	 *
+	 * @access public
+	*/
 	public function view_profile(){
-		
+		$data['title'] = "View Profile - Onlib";
+		$this->load->model('administrator_model');
+
+		$data['results'] = $this->administrator_model->get_profile($this->session->userdata('id'));
+
+		$this->load->view('user_profile_view', $data);
 	}
 
-	/* ******************** GENERATE REPORT MODULE ******************** */
+	/* **************************************** GENERATE REPORT MODULE **************************************** */
 	public function view_report_index(){
 		$data["title"] = "Home - ICS Library System";
 		$this->load->view("report_generation_view", $data);
@@ -410,8 +472,29 @@ class Librarian extends CI_Controller{
 		}
 	}
 
-	/* ******************** END OF GENERATE REPORT MODULE ******************** */
+	/* **************************************** END OF GENERATE REPORT MODULE **************************************** */
 
+	/**
+	 * Decrements/Increments the total_available of a reference
+	 *
+	 * @access public
+	*/
+	public function claim_return(){
+		$referenceId = $this->uri->segment(3);
+		$flag = $this->uri->segment(4);
+
+		if(intval($referenceId) > 0)
+			$this->librarian_model->claim_return_reference($referenceId, $flag);
+
+		redirect('librarian/view_reference/' . $referenceId);
+	}
+
+	/**
+	 * Display all references borrowed, reserved and waitlisted, and users who borrowed, reserved, and waitlisted such references
+	 *
+	 * @access public
+	*/
+	//public function trans
 	
 }
 

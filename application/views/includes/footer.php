@@ -1,5 +1,5 @@
 	
-	<div class="navbar-fixed-bottom" id="test">
+	<div class="navbar-fixed-bottom" id="bottom-bar">
      <div class="text-center"> ICS Library 2014. 
      <p class="pull-right"><u><a href="http://www.portnine.com" target="_blank">ABOUT US<u></a></p>
      <p class="pull-right1"><u><a href="http://www.portnine.com" target="_blank">FAQ<u></a></p> 

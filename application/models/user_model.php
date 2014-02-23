@@ -35,7 +35,7 @@ class User_model extends CI_Model{
 	 * @return	array
 	 */
 	public function get_user_data($username, $password){
-		$this->db->select(array('id', 'user_type', 'username')
+		$this->db->select(array('id', 'user_type', 'username','email_address','first_name')
 						 )
 				 ->from('users')
 				 ->where('username', $username)
@@ -44,34 +44,6 @@ class User_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	
-	/**
-	 * This function gets the reference material info that matched the search input
-	 * @param	search input (string)
-	 * @return	rows from database
-	 */
-	public function search_reference_material($input){
-		$this->db->select('*')
-			->from('reference_material')
-			->like('title',$input)
-			->or_like('author',$input)
-			->or_like('isbn',$input)
-			->or_like('publisher',$input)
-			->or_like('publication_year',$input)
-			->or_like('course_code',$input);
-
-		$searchQuery = $this->db->get();
-		return $searchQuery->result();
-	}
-
-	/**
-	 * This function returns the query result
-	 * @param	query (string)
-	 * @return	rows from database
-	 */
-	public function advanced_search($query){
-		return $this->db->query($query);
-	}
-
 	/**
 	 * This function checks if the User can reserve, cannot reserve, cannot reserve but can waitlist OR has reserved the reference material already
 	 * @param	referenceId (int), userId (int), userType (char)
@@ -214,8 +186,8 @@ class User_model extends CI_Model{
 	 * @param	id (int), username (string), password (string), college_address (string), email (string), contact number (int)
 	 * @return	none
 	 */
-	public function user_update_profile($id, $username, $password, $college_address, $contact_number){
-		$updateArray = array('username' => $username, 'password' => $password, 'college_address' => $college_address, 'contact_number' => $contact_number);
+	public function user_update_profile($id, $username, $password, $college_address, $email_address, $contact_number){
+		$updateArray = array('username' => $username, 'password' => $password, 'college_address' => $college_address, 'email_address' => $email_address, 'contact_number' => $contact_number);
 				$this->db->where('id', $id);
 				$this->db->update('users', $updateArray);
 	}
@@ -431,6 +403,123 @@ class User_model extends CI_Model{
 
 		}
 
+	}
+	/**
+	*	Function gets the exact reference material based from unique id; for viewing the book
+	*
+	*	@param $bookid (string)
+	*	@return rows from db || null
+	*/
+	public function view_reference_material($bookid){
+		return $this->db->query("Select * from reference_material where id = $bookid ");
+	}
+
+
+	/**
+	*	Function gets the specified reference materials from table with matching keyword; used for pagination
+	*
+	*	@param $keyword (string)
+	*	@return rows from db || null
+	*/
+	
+	public function search_reference_material($keyword,$limit,$offset){
+		if($offset == null) $offset = 0;
+		return  $this->db->query("Select * from reference_material where title like '%$keyword%' order by title asc limit $offset,$limit");
+	}
+
+	/**
+	 * This function gets the reference material info that matched the search input
+	 * @param	search input (string)
+	 * @return	rows from database
+	 */
+	public function search_reference_materials($input){
+		$this->db->select('*')
+			->from('reference_material')
+			->like('title',$input)
+			->or_like('author',$input)
+			->or_like('isbn',$input)
+			->or_like('publisher',$input)
+			->or_like('publication_year',$input)
+			->or_like('course_code',$input);
+
+		$searchQuery = $this->db->get();
+		return $searchQuery->result();
+	}
+
+	/**
+	*	Function gets the specified reference materials from table with matching keyword; used for pagination's
+	*	total page number
+	*
+	*	@param $keyword (string)
+	*	@return rows from db || null
+	*/
+	public function search_reference_material2($keyword){
+		return  $this->db->query("Select * from reference_material where title like '%$keyword%' order by title asc");
+	}
+
+
+	/**
+	*	Function gets the specified reference materials from table with matching keyword; used when first
+	*	query returned 0.
+	*
+	*	@param $keyword (string), $limit (int), $offset(int)
+	*	@return rows from db || null
+	*/
+	public function search_reference_material_token($keywords,$limit,$offset){
+		if($offset == null) $offset = 0;
+
+		$keyword_tokens = preg_split("/[\s,]+/", $keywords);
+
+		$sql = "SELECT * FROM reference_material WHERE title LIKE'%";
+		$sql .= implode("%' OR title LIKE '%", $keyword_tokens) . "'";
+		$sql .= "order by title asc limit $offset,$limit";
+		return  $this->db->query($sql);
+	}
+
+	/**
+	*	Function gets the specified reference materials from table with matching keyword; used for pagination
+	*
+	*	@param $keywords (string)
+	*	@return rows from db || null
+	*/
+	public function search_reference_material_token2($keywords){
+		$keyword_tokens = preg_split("/[\s,!@#$\[\]\*\(\)\^<>\?\+\_\={}]+/", $keywords);
+
+		$sql = "SELECT * FROM reference_material WHERE title LIKE'%";
+		$sql .= implode("%' OR title LIKE '%", $keyword_tokens) . "'";
+		$sql .= "order by title asc";
+		return  $this->db->query($sql);
+	}
+
+	/**
+	*	Function gets the exact reference material based from unique id; for viewing the book
+	*
+	*	@param $bookid (string)
+	*	@return rows from db || null
+	*/
+	/*
+	public function view_reference_material($bookid){
+		return $this->db->query("Select * from reference_material where id = $bookid ");
+	}*/
+
+	/**
+	*	Function gets the reference materials using the advanced search
+	*
+	*	@param $query (string)
+	*	@return rows from db || null
+	*/
+	public function advanced_search($query){
+		return $this->db->query($query);
+	}
+
+	/**
+	*	Function gets the reference materials using the advanced search; without offset
+	*
+	*	@param $query (string)
+	*	@return rows from db || null
+	*/
+	public function advanced_search2($query){
+		return $this->db->query($query);
 	}
 }
 
