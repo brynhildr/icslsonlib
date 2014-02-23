@@ -52,7 +52,7 @@ class Librarian_model extends CI_Model{
 		if($query_array['deletion'] != 'N')
 			$this->db->where('for_deletion', $query_array['deletion']);
 
-		$result = $this->db->get('reference_material');
+		$result = $this->db->get('reference_materials');
 
 		return $result->num_rows();
 	}//end of function get_number_of_rows
@@ -96,7 +96,7 @@ class Librarian_model extends CI_Model{
 
 		$this->db->limit($query_array['row'], $start);
 		
-		return $this->db->get('reference_material');
+		return $this->db->get('reference_materials');
 	}//end of function get_search_reference
 
 	/**
@@ -109,12 +109,12 @@ class Librarian_model extends CI_Model{
     public function delete_references($book_id){
 		
 		$this->db->where('id', $book_id);
-		$query = $this->db->get('reference_material');
+		$query = $this->db->get('reference_materials');
 		foreach($query->result() as $row):
 			//Check books if complete
 			if($row->total_available === $row->total_stock){
 				$this->load->database();
-				$this->db->delete('reference_material', array('id' => $book_id)); 
+				$this->db->delete('reference_materials', array('id' => $book_id)); 
 				return -1;
 			}
 			else{
@@ -131,7 +131,7 @@ class Librarian_model extends CI_Model{
 	 * @return 	object
 	*/
 	function get_ready_for_deletion(){
-		$sql = "SELECT id, title, author FROM reference_material WHERE total_available = total_stock AND for_deletion = 'T'";
+		$sql = "SELECT id, title, author FROM reference_materials WHERE total_available = total_stock AND for_deletion = 'T'";
 		$query = $this->db->query($sql);
 		return $query;
 		
@@ -141,9 +141,9 @@ class Librarian_model extends CI_Model{
 	function get_other_books($idready){
 		if(!empty($idready)){
 			$this->db->where_not_in('id',$idready);
-			return $this->db->get('reference_material');
+			return $this->db->get('reference_materials');
 		}else{
-			return $this->db->get('reference_material');
+			return $this->db->get('reference_materials');
 		}
 	}
 	
@@ -152,7 +152,7 @@ class Librarian_model extends CI_Model{
 		$info = array();
 		foreach($selected as $id):
 			$this->db->where('id',$id);
-			$info[] = $this->db->get('reference_material');
+			$info[] = $this->db->get('reference_materials');
 		endforeach;
 		
 		return $info;
@@ -161,7 +161,7 @@ class Librarian_model extends CI_Model{
 	//Update the for_deletion attribute
 	function update_for_deletion($book_id){ //Changes 'For Deletion' attribute of the reference to  'T'
 		$this->db->where('id', $book_id);
-		$this->db->update('reference_material', array('for_deletion' => 'T')); 
+		$this->db->update('reference_materials', array('for_deletion' => 'T')); 
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Librarian_model extends CI_Model{
 	 * @param 	array 	$data
 	*/
 	function add_data($data){      
-        $this->db->insert('reference_material', $data);
+        $this->db->insert('reference_materials', $data);
     }//end of function add_data
 
     /**
@@ -183,25 +183,25 @@ class Librarian_model extends CI_Model{
     */
     public function add_multipleData($data, $count){
         for($i = 0; $i < $count; $i++) {
-            $this->db->insert('reference_material', $data[$i]);
+            $this->db->insert('reference_materials', $data[$i]);
         }
 
         /*find a more efficient way to do this */
         $this->db->set('isbn',NULL);
         $this->db->where('isbn','');
-        $this->db->update('reference_material');
+        $this->db->update('reference_materials');
 
         $this->db->set('description',NULL);
         $this->db->where('description','');
-        $this->db->update('reference_material');
+        $this->db->update('reference_materials');
 
         $this->db->set('publisher',NULL);
         $this->db->where('publisher','');
-        $this->db->update('reference_material');
+        $this->db->update('reference_materials');
 
         $this->db->set('publication_year',NULL);
         $this->db->where('publication_year','');
-        $this->db->update('reference_material');
+        $this->db->update('reference_materials');
     }//end of function add_multipleData
 
     /**
@@ -211,7 +211,7 @@ class Librarian_model extends CI_Model{
      * @param 	array 	$query_array
     */
     public function edit_reference($query_array){
-      	$this->db->query("UPDATE reference_material SET 
+      	$this->db->query("UPDATE reference_materials SET 
       			title = '{$query_array['title']}', 
       			author = '{$query_array['author']}', 
       			isbn = '{$query_array['isbn']}', 
@@ -234,7 +234,7 @@ class Librarian_model extends CI_Model{
     */
     public function get_reference($referenceId){
         $this->db->where('id', $referenceId);
-        return $this->db->get('reference_material');
+        return $this->db->get('reference_materials');
     }//end of function get_reference
 
     /**
@@ -267,7 +267,7 @@ class Librarian_model extends CI_Model{
 	*	@return rows from db || null
 	*/
 	public function get_popular(){
-		return $this->db->query("SELECT * FROM reference_material WHERE times_borrowed = (SELECT max(times_borrowed) FROM reference_material)");
+		return $this->db->query("SELECT * FROM reference_materials WHERE times_borrowed = (SELECT max(times_borrowed) FROM reference_materials)");
 	}
 
 	/**
@@ -281,7 +281,7 @@ class Librarian_model extends CI_Model{
 		$updateStatus = FALSE; 
 		
 		//Get stock ad stock within library
-		$stockData = $this->db->query("SELECT total_stock, total_in_stock FROM reference_material WHERE id = '{$referenceId}'")->result();
+		$stockData = $this->db->query("SELECT total_stock, total_in_stock FROM reference_materials WHERE id = '{$referenceId}'")->result();
 		foreach($stockData as $data){
 			$newValue = $data->total_in_stock;
 			$ceilingValue = $data->total_stock;
@@ -297,7 +297,7 @@ class Librarian_model extends CI_Model{
 		}
 		
 		if($updateStatus === TRUE){
-			$this->db->query("UPDATE reference_material SET total_in_stock = '{$newValue}' WHERE id = '{$referenceId}'");
+			$this->db->query("UPDATE reference_materials SET total_in_stock = '{$newValue}' WHERE id = '{$referenceId}'");
 			$this->db->query("UPDATE transactions SET date_borrowed = date('Y-m-d'), borrow_due_date = ");
 		}
 	}
