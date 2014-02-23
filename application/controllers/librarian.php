@@ -163,7 +163,7 @@ class Librarian extends CI_Controller{
 		$this->load->helper('text');
 
 		$id = $this->uri->segment(3);
-		if($id === 	FALSE)
+		if($id === FALSE)
 			redirect('librarian');
 
 		//Filter the user's input of HTML special symbols
@@ -187,11 +187,7 @@ class Librarian extends CI_Controller{
 			redirect('librarian/edit_reference_index/' . $id);
 		if(preg_match("/\A[A-Z]{2,3}\d{2,3}\z/", $course_code) === FALSE)
 			redirect('librarian/edit_reference_index/' . $id);
-<<<<<<< HEAD
 		*/
-=======
-
->>>>>>> 0562ff6da6e8b83710bb98b1d0e4da083abc240c
 		//Store the input from user to be passed on the model
 	    $query_array = array(
 	       	'id' => $id,
@@ -295,7 +291,6 @@ class Librarian extends CI_Controller{
 
 		if($this->input->post('submit')) {
 			$data = array(
-<<<<<<< HEAD
 	        	'TITLE' => htmlspecialchars(trim($this->input->post('title'))),
 	            'AUTHOR' => htmlspecialchars(trim($this->input->post('author'))),
 	            'ISBN' => htmlspecialchars($this->input->post('isbn')),
@@ -311,22 +306,6 @@ class Librarian extends CI_Controller{
         	);
 			$data['TOTAL_AVAILABLE'] = $data['TOTAL_STOCK'];
 			$data['TOTAL_IN_STOCK'] = $data['TOTAL_STOCK'];
-=======
-	        	'TITLE' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('title')))),
-	            'AUTHOR' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('author')))),
-	            'ISBN' => htmlspecialchars(mysql_real_escape_string($this->input->post('isbn'))),
-	            'CATEGORY' => htmlspecialchars(mysql_real_escape_string($this->input->post('category'))),
-	            'DESCRIPTION' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('description')))),
-	            'PUBLISHER' => htmlspecialchars(mysql_real_escape_string(trim($this->input->post('publisher')))),
-	            'PUBLICATION_YEAR' => htmlspecialchars(mysql_real_escape_string($this->input->post('year'))),
-	            'ACCESS_TYPE' => htmlspecialchars(mysql_real_escape_string($this->input->post('access_type'))),
-	            'COURSE_CODE' => htmlspecialchars(mysql_real_escape_string($this->input->post('course_code'))),
-	            'TOTAL_AVAILABLE' => htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock'))),
-	            'TOTAL_STOCK' => htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock'))),
-	            'TIMES_BORROWED' => '0',
-	            'FOR_DELETION' => 'F'    
-        	);
->>>>>>> 0562ff6da6e8b83710bb98b1d0e4da083abc240c
 
 			//Setting empty fields that can be NULL to NULL
 			if($data['ISBN'] == '')

@@ -167,13 +167,8 @@ class Librarian_model extends CI_Model{
 	/**
 	 * Adds a reference in the database
 	 *
-<<<<<<< HEAD
 	 * @access 	public
 	 * @param 	array 	$data
-=======
-	 * @access public
-	 * @param array $data
->>>>>>> 0562ff6da6e8b83710bb98b1d0e4da083abc240c
 	*/
 	function add_data($data){      
         $this->db->insert('reference_material', $data);
