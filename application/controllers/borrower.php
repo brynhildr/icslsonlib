@@ -12,7 +12,13 @@ class Borrower extends CI_Controller{
 		$data["title"] = "Home - ICS Library System";
 		$this->load->view("borrower_main_view", $data);
 	}
-
+	/**
+	 * Controller to view profile
+	 *
+	 * @access	public
+	 * @param	none
+	 * @return	none
+	 */	
 	public function view_borrower_profile_index(){
 		$data["title"] = "Profile - ICS Library System";
 
@@ -25,7 +31,13 @@ class Borrower extends CI_Controller{
 		$data['username_exist'] = "";
 		$this->load->view("borrower_profile_view", $data);
 	}
-
+	/**
+	 * Controller to edit the borrower's profile
+	 *
+	 * @access	public
+	 * @param	none
+	 * @return	none
+	 */	
 	public function save(){
 			$username = $this->session->userdata('username');
 			$id = $this->session->userdata('id');
@@ -67,7 +79,13 @@ class Borrower extends CI_Controller{
 			$data['save_message'] = "Update Saved!";//save message
 			$this->load->view("borrower_profile_view", $data);
 		}
-
+	/**
+		 * Controller to change borrower's profile picture
+		 *
+		 * @access	public
+		 * @param	none
+		 * @return	none
+		 */	
 		public function change_profile_picture(){
 			$this->load->library('upload');
 			$username = $this->session->userdata('username');

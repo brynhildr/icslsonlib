@@ -4,7 +4,7 @@
  *
  * @package	icsls
  * @category Model	
- * @author	CMSC 128 AB-5L Team 1
+ * @author	CMSC 128 AB-5L Team 1 & Team 4
  */
 
 class User_model extends CI_Model{
@@ -49,7 +49,7 @@ class User_model extends CI_Model{
 	 * @param	referenceId (int), userId (int), userType (char)
 	 * @return	true || false || constant number (7)
 	 */
-	public function reserve_reference_material($referenceId, $userId, $userType){
+	public function reserve_reference_materials($referenceId, $userId, $userType){
 		date_default_timezone_set("Asia/Manila");	//timezone here in the Philippines
 
 		$this->db->select('borrow_limit')
@@ -66,7 +66,7 @@ class User_model extends CI_Model{
 		$transactionQuery = $this->db->get();
 
 		$this->db->select('access_type, total_available, times_borrowed')
-			->from('reference_material')
+			->from('reference_materials')
 			->where('id',$referenceId);
 		$referenceQuery = $this->db->get();
 
@@ -92,7 +92,7 @@ class User_model extends CI_Model{
 
 				$refArray = array('total_available' => $newTotal, 'times_borrowed' => $newTimesBorrowed);
 				$this->db->where('id', $referenceId);
-				$this->db->update('reference_material', $refArray);
+				$this->db->update('reference_materials', $refArray);
 			
 				$data = array('reference_material_id' => $referenceId, 'borrower_id' => $userId, 'user_type' => $userType, 'waitlist_rank' => NULL, 'date_waitlisted' => NULL, 'date_reserved' => $dateReserved, 'reservation_due_date' => $reserveDue, 'date_borrowed' => NULL, 'borrow_due_date' => NULL, 'date_returned' => NULL);
 				$this->db->insert('transactions', $data);
@@ -105,11 +105,11 @@ class User_model extends CI_Model{
 	 * @param	referenceId (int), userId (int), userType (char)
 	 * @return	true || false || constant number (7)
 	 */
-	public function waitlist_reference_material($referenceId, $userId, $userType){
+	public function waitlist_reference_materials($referenceId, $userId, $userType){
 		date_default_timezone_set("Asia/Manila");	//timezone in the Philippines
 
 		$this->db->select('total_available, access_type')
-			->from('reference_material')
+			->from('reference_materials')
 			->where('id',$referenceId);
 		$bookStatus = $this->db->get();
 		foreach ($bookStatus->result() as $row) {
@@ -186,8 +186,8 @@ class User_model extends CI_Model{
 	 * @param	id (int), username (string), password (string), college_address (string), email (string), contact number (int)
 	 * @return	none
 	 */
-	public function user_update_profile($id, $username, $password, $college_address, $email_address, $contact_number){
-		$updateArray = array('username' => $username, 'password' => $password, 'college_address' => $college_address, 'email_address' => $email_address, 'contact_number' => $contact_number);
+	public function user_update_profile($id, $username, $password, $college_address, $contact_number){
+		$updateArray = array('username' => $username, 'password' => $password, 'college_address' => $college_address, 'contact_number' => $contact_number);
 				$this->db->where('id', $id);
 				$this->db->update('users', $updateArray);
 	}
@@ -212,7 +212,7 @@ class User_model extends CI_Model{
 	 */
 	public function user_book_reserve($reference_material_id){
 		$this->db->select('*')
-			->from('reference_material')
+			->from('reference_materials')
 			->where('id',$reference_material_id);
 		$userBookReserve = $this->db->get();
 		return $userBookReserve->result();
@@ -223,13 +223,14 @@ class User_model extends CI_Model{
 	 * @param	table name (string), data (array)
 	 * @return	none
 	 */
-	public function insert_account($table_name, $data){
+	public function insert_account( $table_name, $data){
+
 		$snum = $this->input->post('student_number');
 		$enum = $this->input->post('employee_number');
 		$lname = $this->input->post('last_name');
 		$fname = $this->input->post('first_name');
 		$mname = $this->input->post('middle_name');
-		$usertype = $this->input->post('usertype');
+		$usertype = $this->input->post('user_type');
 		$username = $this->input->post('username');
 		$password = md5($_POST['password']);
 		$collegeAdd = $this->input->post('college_address');
@@ -239,15 +240,13 @@ class User_model extends CI_Model{
 		$degree = $this->input->post('degree');
 		
 		if($usertype == 'S'){
-			$enum = NULL;
+			$data = array('employee_number' => NULL, 'student_number' => $snum, 'last_name' => $lname, 'first_name' => $fname, 'middle_name' => $mname, 'user_type' => $usertype, 'username' => $username, 'password' => $password, 'college_address' => $collegeAdd, 'email_address' => $email, 'contact_number' => $contactNum, 'borrow_limit' => 3, 'waitlist_limit' => 5, 'college' => $college, 'degree' => $degree);
 		}
 		else if($usertype == 'F'){
-			$snum = NULL;
-			$college = NULL;
-			$degree = NULL;
-		}
+			$data = array('employee_number' => $enum, 'student_number' => NULL, 'last_name' => $lname, 'first_name' => $fname, 'middle_name' => $mname, 'user_type' => $usertype, 'username' => $username, 'password' => $password, 'college_address' => $collegeAdd, 'email_address' => $email, 'contact_number' => $contactNum, 'borrow_limit' => 3, 'waitlist_limit' => 5, 'college' => NULL, 'degree' => NULL);
 
-		$data = array('employee_number' => $enum, 'student_number' => $snum, 'last_name' => $lname, 'first_name' => $fname, 'middle_name' => $mname, 'user_type' => $usertype, 'username' => $username, 'password' => $password, 'college_address' => $collegeAdd, 'email_address' => $email, 'contact_number' => $contactNum, 'borrow_limit' => 3, 'waitlist_limit' => 5, 'college' => $college, 'degree' => $degree);
+		}
+		
 		$this->db->insert($table_name, $data);
 	}
 
@@ -270,7 +269,7 @@ class User_model extends CI_Model{
 	 * @param	employee number(varchar)
 	 * @return	true || false
 	 */
-	public function faculty_exists($enum){
+	public function staff_exists($enum){
 		$this->db->select('employee_number')
 			->from('users')
 			->where('employee_number',$enum);
@@ -298,7 +297,7 @@ class User_model extends CI_Model{
 	 * @param	reference id (int), user id (int)
 	 * @return	true
 	 */
-	public function cancel_reserve_reference_material($referenceId, $userId){
+	public function cancel_reserve_reference_materials($referenceId, $userId){
 		$this->db->select('borrow_limit')
 			->from('users')
 			->where('id',$userId);
@@ -306,7 +305,7 @@ class User_model extends CI_Model{
 		foreach ($userQuery->result() as $row) { $userBorrowLimit = $row->borrow_limit; }
 		
 		$this->db->select('total_available, times_borrowed')
-			->from('reference_material')
+			->from('reference_materials')
 			->where('id',$referenceId);
 		$referenceQuery = $this->db->get();
 		foreach ($referenceQuery->result() as $row) { 
@@ -324,7 +323,7 @@ class User_model extends CI_Model{
 
 		$cancelArray2 = array('total_available' => $newTotal, 'times_borrowed' => $newTimesBorrowed);
 				$this->db->where('id', $referenceId);
-				$this->db->update('reference_material', $cancelArray2);
+				$this->db->update('reference_materials', $cancelArray2);
 		
 		$this->db->where('borrower_id', $userId);
 		$this->db->where('reference_material_id', $referenceId);
@@ -337,7 +336,7 @@ class User_model extends CI_Model{
 	 * @param	reference id (int), user id (int)
 	 * @return	true
 	 */
-	public function cancel_waitlist_reference_material($referenceId, $userId){
+	public function cancel_waitlist_reference_materials($referenceId, $userId){
 		$this->db->select('waitlist_limit')
 			->from('users')
 			->where('id',$userId);
@@ -410,8 +409,8 @@ class User_model extends CI_Model{
 	*	@param $bookid (string)
 	*	@return rows from db || null
 	*/
-	public function view_reference_material($bookid){
-		return $this->db->query("Select * from reference_material where id = $bookid ");
+	public function view_reference_materials($bookid){
+		return $this->db->query("Select * from reference_materials where id = $bookid ");
 	}
 
 
@@ -422,9 +421,9 @@ class User_model extends CI_Model{
 	*	@return rows from db || null
 	*/
 	
-	public function search_reference_material($keyword,$limit,$offset){
+	public function search_reference_materials($keyword,$limit,$offset){
 		if($offset == null) $offset = 0;
-		return  $this->db->query("Select * from reference_material where title like '%$keyword%' order by title asc limit $offset,$limit");
+		return  $this->db->query("Select * from reference_materials where title like '%$keyword%' order by title asc limit $offset,$limit");
 	}
 
 	/**
@@ -432,9 +431,9 @@ class User_model extends CI_Model{
 	 * @param	search input (string)
 	 * @return	rows from database
 	 */
-	public function search_reference_materials($input){
+	public function search_reference_materialss($input){
 		$this->db->select('*')
-			->from('reference_material')
+			->from('reference_materials')
 			->like('title',$input)
 			->or_like('author',$input)
 			->or_like('isbn',$input)
@@ -453,8 +452,8 @@ class User_model extends CI_Model{
 	*	@param $keyword (string)
 	*	@return rows from db || null
 	*/
-	public function search_reference_material2($keyword){
-		return  $this->db->query("Select * from reference_material where title like '%$keyword%' order by title asc");
+	public function search_reference_materials2($keyword){
+		return  $this->db->query("Select * from reference_materials where title like '%$keyword%' order by title asc");
 	}
 
 
@@ -465,12 +464,12 @@ class User_model extends CI_Model{
 	*	@param $keyword (string), $limit (int), $offset(int)
 	*	@return rows from db || null
 	*/
-	public function search_reference_material_token($keywords,$limit,$offset){
+	public function search_reference_materials_token($keywords,$limit,$offset){
 		if($offset == null) $offset = 0;
 
 		$keyword_tokens = preg_split("/[\s,]+/", $keywords);
 
-		$sql = "SELECT * FROM reference_material WHERE title LIKE'%";
+		$sql = "SELECT * FROM reference_materials WHERE title LIKE'%";
 		$sql .= implode("%' OR title LIKE '%", $keyword_tokens) . "'";
 		$sql .= "order by title asc limit $offset,$limit";
 		return  $this->db->query($sql);
@@ -482,10 +481,10 @@ class User_model extends CI_Model{
 	*	@param $keywords (string)
 	*	@return rows from db || null
 	*/
-	public function search_reference_material_token2($keywords){
+	public function search_reference_materials_token2($keywords){
 		$keyword_tokens = preg_split("/[\s,!@#$\[\]\*\(\)\^<>\?\+\_\={}]+/", $keywords);
 
-		$sql = "SELECT * FROM reference_material WHERE title LIKE'%";
+		$sql = "SELECT * FROM reference_materials WHERE title LIKE'%";
 		$sql .= implode("%' OR title LIKE '%", $keyword_tokens) . "'";
 		$sql .= "order by title asc";
 		return  $this->db->query($sql);
@@ -498,8 +497,8 @@ class User_model extends CI_Model{
 	*	@return rows from db || null
 	*/
 	/*
-	public function view_reference_material($bookid){
-		return $this->db->query("Select * from reference_material where id = $bookid ");
+	public function view_reference_materials($bookid){
+		return $this->db->query("Select * from reference_materials where id = $bookid ");
 	}*/
 
 	/**

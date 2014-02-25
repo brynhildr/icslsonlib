@@ -25,7 +25,7 @@ class Cart_Controller extends CI_Controller{
 		$data['title'] = "Cart - ICS Library System";
 
 		$bookid = $this->uri->segment(3);
-		$result = $this->user_model->view_reference_material($bookid);//we reused the function in which we view the details of the book
+		$result = $this->user_model->view_reference_materials($bookid);//we reused the function in which we view the details of the book
 		foreach ($result->result() as $row){
 		    $bookyear = $row->publication_year;
 		    $booktitle = $row->title;

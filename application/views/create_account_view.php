@@ -5,6 +5,51 @@
 <!-- Note: d q sure kung tama ung patterns na nilagay ko. Pacheck na lang tnx -->
 
 	<!--alert to inform the user about the error -->
+	<script src=<?php echo base_url("themes/jquery-2.0.3.min.js"); ?>></script>
+		<script type="text/javascript">	
+			window.onload = function(){
+					createForm.password.onblur = validatePassword;
+					createForm.repass.onblur = validateRePass;
+					
+					$("#stdno").hide();
+					$("#student_number").hide();
+					$(".collegeDropdown").hide();
+					$(".degreeDropdown").hide();
+					$("#enum").hide();
+					$("#employee_number").hide();
+					
+					$("#employee_number").attr("disabled", "disabled");
+					$("#student_number").attr("disabled", "disabled");
+			}
+			
+			function validatePassword(){
+				msg = "Invalid input!  ";
+				str = createForm.password.value;
+				
+				if(str == "") msg+="Password is required. ";
+				if(str.match(/^[a-z]$/)) msg="Strength: Weak";
+				else if(str.match(/^[0-9]+$/)) msg="Strength: Weak";
+				else if(str.match(/^[a-z0-9]+$/)) msg="Strength: Medium";
+				else if(str.match(/^[a-zA-Z0-9]+$/)) msg="Strength: Strong";
+				
+				if(msg == "Invalid input!  ") msg="";
+				document.getElementsByName("helppass")[0].innerHTML=msg;
+				
+			}
+				
+			function validateRePass(){
+				msg = "Invalid input!  ";
+				str = createForm.repass.value;
+				
+				if(str != createForm.password.value) msg+="Password does not match. ";
+				else msg="Passwords match.";
+				
+				if(msg == "Invalid input!  ") msg="";
+				document.getElementsByName("helprepass")[0].innerHTML=msg;
+				if(msg == "") return true;
+				
+			}	
+		</script>
 
 	<div id="add_acc">
 	<?php if(isset($_POST['submit'])) {echo "<script>alert(\"Your email has already been used. Please enter a another one.\");</script>";} ?>
@@ -48,6 +93,42 @@
 			  <option value="A">Admin</option>
 			  <option value="L">Librarian</option>
 			</select>
+
+			<script type="text/javascript">
+
+				$(".typeDropdown").change(function() {
+					var type=$(this).val();
+					if(type == 'S'){
+						$("#employee_number").attr("disabled", "disabled");
+						$("#student_number").attr("disabled", "disabled");
+						$("#stdno").show();
+						$("#student_number").show();
+						$(".degreeDropdown").show();
+						$(".collegeDropdown").show();
+						
+						$("#enum").hide();
+						$("#employee_number").hide();
+						
+						$("#employee_number").removeAttr("enabled");
+						$("#student_number").removeAttr("disabled");
+					} else if(type == 'F'){
+						$("#employee_number").attr("disabled", "disabled");
+						$("#student_number").attr("disabled", "disabled");
+
+						$("#stdno").hide();
+						$("#student_number").hide();
+						$(".degreeDropdown").hide();
+						$(".collegeDropdown").hide();
+						
+						$("#enum").show();
+						$("#employee_number").show();
+						
+						$("#employee_number").removeAttr("disabled");
+						$("#student_number").removeAttr("enabled");
+					}
+				});
+			</script>
+
 		</tr>
 		<tr>
 			<td align="right"><button type="button" class="btn btn-primary" width="2em" >Username:</button></td>

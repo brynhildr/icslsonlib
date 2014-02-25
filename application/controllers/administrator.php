@@ -146,61 +146,50 @@ class Administrator extends CI_Controller{
 	
 	
 	/*
-		Changelog for create_accounts()
-		//create_accounts function is for the admin to add account of a admin and librarian
-		
-		1/29
-		-Deleted insert_account function merging it to create_accounts function because of redundancy 
-		-isset function used to check the set fields to know which view to invoke
+		create_account(): student, employee, librarian, admin
 		
 	*/
 	
-	//Erika Kimhoko
+	//Janet Ordillano
 	public function create_account(){	
 	
-		if(isset($_POST['submit'])){
-			$employee_no = $_POST["employee_no"];
-			$last_name = $_POST["last_name"];
-			$first_name = $_POST["first_name"];
-			$middle_name = $_POST["middle_name"];
-			$user_type = $_POST["user_type"];
-			$username = $_POST["username"];
-			$password = md5($_POST["password"]);
-			$college_address = $_POST["college_address"];
-			$email_address = $_POST["email_address"];
-			$contact = $_POST["contact"];
-			
-			
-			//call the method in the model to insert the data
-			$accounts = $this->administrator_model->insert_account( $employee_no , $last_name, $first_name , $middle_name,
-				$user_type , $username, $password, $college_address, $email_address ,$contact );
+		//if it is a student
+		if($_POST['user_type'] == 'S'){
+			$studnum = $_POST['student_number'];
+			$uname = $_POST['username'];
+
+			$studentQuery = $this->user_model->student_exists($studnum);
+			$usernameQuery = $this->user_model->username_exists($uname);
+
+			if($studentQuery == TRUE || $usernameQuery == TRUE){
+				$this->load->view('home_view');
+					echo "Account already exists.";
+			}else {	
+				$this->load->model('user_model');
+				$this->user_model->insert_account('users', $_POST);	//user_model used
 				
-			//if database already contains the same username call the create view again
-			if($accounts == 0){
-				//data to fill the forms automatically except the username
-				$data['employee_no'] = $employee_no;
-				$data['last_name'] = $last_name;
-				$data['first_name'] = $first_name;
-				$data['middle_name'] = $middle_name;
-				$data['user_type'] = $user_type;
-				$data['college_address'] = $college_address;
-				$data['contact'] = $contact;
-				$data['email_address'] = $email_address;
-				
-				//redirect to fill out username, password, email which has the same values
-				$this->load->view("create_account_view" , $data);
-			}
-			else{
-				//load the page where the user should be redirected after creating an account
-				//edit the view where to redirect to put the prompt of successfully created account
-				$data['notification_message'] = "You successfully created the account";
-				$data['title'] = "Administrator Home - ICS Library System";
-				$this->load->view("administrator_home_view", $data);
+				echo "Account succesfully created.";
+				$this->load->view('home_view');
 			}
 		}
-		else{
-			//first display of the view
-			$this->load->view("create_account_view");
+		//if User is a faculty, librarian or admin
+		else {
+			$enum = $_POST['employee_number'];
+			$uname = $_POST['username'];
+
+			$facultyQuery = $this->user_model->staff_exists($enum);
+			$usernameQuery = $this->user_model->username_exists($uname);
+
+			if($facultyQuery == TRUE || $usernameQuery == TRUE){
+				$this->load->view('home_view');
+				echo "Account already exists.";
+			}else {
+				$this->load->model('user_model');
+				$this->user_model->insert_account('users', $_POST);	//user_model used
+				
+				echo "Account succesfully created.";
+				$this->load->view('home_view');
+			}
 		}
 	}
 	
@@ -261,7 +250,7 @@ class Administrator extends CI_Controller{
 		$password = $_POST["password"];
 		$college_address = $_POST["college_address"];
 		$email_address = $_POST["email_address"];
-		$contact = $_POST["contact"];
+		$contact_number = $_POST["contact_number"];
 		$college = $_POST["college"];
 		$degree = $_POST["degree"];
 
@@ -269,8 +258,8 @@ class Administrator extends CI_Controller{
 			$student_number = $this->input->post('stud_no');
 			$employee_number = NULL;
 		}
-		else if($this->input->post('employee_no')){
-			$employee_number = $this->input->post('employee_no');
+		else if($this->input->post('employee_number')){
+			$employee_number = $this->input->post('employee_number');
 			$student_number = NULL;
 		}
 		$this->load->model('administrator_model');
@@ -278,7 +267,7 @@ class Administrator extends CI_Controller{
 		$this->administrator_model->save_changes("UPDATE users 
 				SET employee_number = '$employee_number', student_number = '$student_number', last_name = '$last_name', first_name = '$first_name', 
 				middle_name = '$middle_name', username = '$username', password = '$password', 
-				college_address = '$college_address', email_address = '$email_address', contact_number = '$contact',
+				college_address = '$college_address', email_address = '$email_address', contact_number = '$contact_number',
 				college = '$college', degree = '$degree'
 				WHERE username = '$username'");
 

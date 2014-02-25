@@ -4,7 +4,13 @@ class Login extends CI_Controller{
 	public function Login(){
 		parent::__construct();
 	}
-
+	/**
+	 * Controller to check if the user is registered or not and allows the user to log in
+	 * accdg to user type
+	 * @access	public
+	 * @param	none
+	 * @return	none
+	 */	
 	public function index(){
 		if(!(isset($_POST['username'])) && !(isset($_POST['password']))){
 			$username = "";

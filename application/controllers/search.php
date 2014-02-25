@@ -15,7 +15,7 @@ class Search extends CI_Controller{
 		$data['header'] = "Search";
 		$this->load->view("search_view", $data);
 	} 
-	/* Description: Calls the search_reference_material function to get search results
+	/* Description: Calls the search_reference_materials function to get search results
 	   based on the User's search input */
 	public function search_rm(){
 		$data["title"] = "Search - ICS Library System";
@@ -63,12 +63,12 @@ class Search extends CI_Controller{
 			
 			$temporary = $_GET['per_page'];
 			$temporary = str_replace($order2, '', $temporary);
-			$result1 = $this->user_model->search_reference_material($keyword,$config['per_page'],$temporary);
+			$result1 = $this->user_model->search_reference_materials($keyword,$config['per_page'],$temporary);
 			
 			$data['flags'] = FALSE;
 			if($result1 != NULL){
 				$data['rows'] = $result1->result();
-				$config['total_rows'] = $this->user_model->search_reference_material2($keyword)->num_rows();
+				$config['total_rows'] = $this->user_model->search_reference_materials2($keyword)->num_rows();
 				//^we get all rows
 				
 				$this->pagination->initialize($config);
@@ -82,12 +82,12 @@ class Search extends CI_Controller{
 			else{
 				$data['rows'] = null;	// resets to null
 				//get the rows with tokenizer
-				$result = $this->user_model->search_reference_material_token($keyword,$config['per_page'],$_GET['per_page']);
+				$result = $this->user_model->search_reference_materials_token($keyword,$config['per_page'],$_GET['per_page']);
 				
 				//if($result != NULL){
 
 					$data['rows'] = $result->result();
-					$temp = $this->user_model->search_reference_material_token2($keyword);
+					$temp = $this->user_model->search_reference_materials_token2($keyword);
 					$config['total_rows'] = $temp->num_rows();
 					$this->pagination->initialize($config);
 
@@ -127,7 +127,7 @@ class Search extends CI_Controller{
 		//echo $email;
 		//if "Reserve" button was clicked
 		if(isset($_GET['reserve'])){
-			$reserveStatus = $this->user_model->reserve_reference_material($referenceId, $userId, $user_type);
+			$reserveStatus = $this->user_model->reserve_reference_materials($referenceId, $userId, $user_type);
 
 			//var_dump($reserveStatus);
 
@@ -137,7 +137,7 @@ class Search extends CI_Controller{
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. You are not allowed to access this book. <br/>";
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. You have reached the limit of borrowing books. <br/>";
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. You have reserved this book already. <br/><br/><br/>";
-				$data['rows'] = $this->user_model->search_reference_materials($input);
+				$data['rows'] = $this->user_model->search_reference_materialss($input);
 				$data['flag'] = 1;
 				if($data['rows'] != NULL)
 					$data['flags']=FALSE;
@@ -149,7 +149,7 @@ class Search extends CI_Controller{
 				echo "Reference material was successfully reserved.";
 				$sessionData = array('canWaitlist' => FALSE, 'referenceId' => $referenceId, 'canReserve' => FALSE);
 				$this->session->set_userdata($sessionData);
-				$data['rows'] = $this->user_model->search_reference_materials($input);
+				$data['rows'] = $this->user_model->search_reference_materialss($input);
 				$data['flag'] = 1;
 				//call to mail
 				
@@ -165,7 +165,7 @@ class Search extends CI_Controller{
 			else{	//if the reference material is out of stock
 				$sessionData = array('canWaitlist' => true, 'referenceId' => $referenceId, 'canReserve' => FALSE);
 				$this->session->set_userdata($sessionData);
-				$data['rows'] = $this->user_model->search_reference_materials($input);//material
+				$data['rows'] = $this->user_model->search_reference_materialss($input);//material
 				$data['flag'] = 0;
 				if($data['rows'] != NULL)
 					$data['flags']=FALSE;
@@ -174,7 +174,7 @@ class Search extends CI_Controller{
 			}
 		 //if "Waitlist" button was clicked
 		}else if(isset($_GET['waitlist'])){
-			$waitlistStatus = $this->user_model->waitlist_reference_material($referenceId, $userId, $user_type);
+			$waitlistStatus = $this->user_model->waitlist_reference_materials($referenceId, $userId, $user_type);
 	
 			if($waitlistStatus == FALSE){	//if conditions in waitlisting were not satisfied
 				echo "Waitlist Denied: <br/>";
@@ -182,7 +182,7 @@ class Search extends CI_Controller{
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. You are not allowed to access this book. <br/>";
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. You have reached the limit of maximum wait list. <br/>";
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. You have waitlisted on this book already. <br/><br/><br/>";
-				$data['rows'] = $this->user_model->search_reference_materials($input);//binalik muna, walang s yung isa
+				$data['rows'] = $this->user_model->search_reference_materialss($input);//binalik muna, walang s yung isa
 				$data['flag'] = 1;
 				if($data['rows'] != NULL)
 					$data['flags']=FALSE;
@@ -193,7 +193,7 @@ class Search extends CI_Controller{
 				echo "Reference material was successfully waitlisted.";
 				$sessionData = array('canWaitlist' => FALSE, 'referenceId' => $referenceId, 'canReserve' => FALSE);
 				$this->session->set_userdata($sessionData);
-				$data['rows'] = $this->user_model->search_reference_materials($input);
+				$data['rows'] = $this->user_model->search_reference_materialss($input);
 				$data['flag'] = 1;
 				if($data['rows'] != NULL)
 					$data['flags']=FALSE;
@@ -203,7 +203,7 @@ class Search extends CI_Controller{
 			else{	//if the reference material is still available
 				$sessionData = array('canReserve' => true, 'referenceId' => $referenceId, 'canWaitlist' => FALSE);
 				$this->session->set_userdata($sessionData);
-				$data['rows'] = $this->user_model->search_reference_materials($input);
+				$data['rows'] = $this->user_model->search_reference_materialss($input);
 				$data['flag'] = 0;
 			if($data['rows'] != NULL)
 					$data['flags']=FALSE;
@@ -212,7 +212,7 @@ class Search extends CI_Controller{
 			}
 		 //if neither of the two buttons (Reserve, Waitlist) were clicked
 		}else{
-				//$data['bookInfo'] = $this->user_model->search_reference_material($input);
+				//$data['bookInfo'] = $this->user_model->search_reference_materials($input);
 				$data['flag'] = 1;
 				$data['rows'] = NULL;
 
@@ -394,21 +394,21 @@ class Search extends CI_Controller{
 	//------------modify
 		$reftype = $this->input->get('reftype');
 		//var_dump($reftype);
-//"select * from reference_material where category = (select * from reference_material where category = 'B')
+//"select * from reference_materials where category = (select * from reference_materials where category = 'B')
 		/*
 		SELECT * 
-FROM reference_material
+FROM reference_materials
 WHERE category
 IN (
 
 SELECT category
-FROM reference_material
+FROM reference_materials
 WHERE category =  'B'
 )*/
 		//we run the query
 		$data['flags']=NULL;
-		$result = $this->user_model->advanced_search("Select * from reference_material where {$query} {$sort} limit {$temporary},{$config['per_page']}");
-		$result2 = $this->user_model->advanced_search("Select * from reference_material where {$query} {$sort}");
+		$result = $this->user_model->advanced_search("Select * from reference_materials where {$query} {$sort} limit {$temporary},{$config['per_page']}");
+		$result2 = $this->user_model->advanced_search("Select * from reference_materials where {$query} {$sort}");
 		if($result != NULL)
 			$data['flags']=FALSE;
 		else $data['flags']=TRUE;
@@ -426,8 +426,8 @@ WHERE category =  'B'
 			//we previously stored in the array the values of those that are checked;
 			//$tempArrayValues[array_search('title')]
 			/*
-SELECT * FROM `reference_material` WHERE title like '%a%' or author like 
-'%carlo%' IN (Select * from `reference_material` where category = 'B')
+SELECT * FROM `reference_materials` WHERE title like '%a%' or author like 
+'%carlo%' IN (Select * from `reference_materials` where category = 'B')
 			*/
 
 		//}
@@ -443,7 +443,7 @@ SELECT * FROM `reference_material` WHERE title like '%a%' or author like
 		$data['title'] = "Book - ICS Library System";
 
 		$bookid = $this->uri->segment(3);
-		$result = $this->user_model->view_reference_material($bookid);
+		$result = $this->user_model->view_reference_materials($bookid);
 		$data['rows'] = $result->result();
 		$this->load->view('view_results_view', $data);
 	}

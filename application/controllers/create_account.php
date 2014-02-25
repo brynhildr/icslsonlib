@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Create_account extends CI_Controller{
 	public function Create_account(){
@@ -21,7 +21,7 @@ class Create_account extends CI_Controller{
 		$data['title'] = "Home - ICS Library System";
 		$data["error_message"] = "";
 		//if User is a student
-		if($_POST['usertype'] == 'S'){
+		if($_POST['user_type'] == 'S'){
 			$studnum = $_POST['student_number'];
 			$uname = $_POST['username'];
 
@@ -29,7 +29,7 @@ class Create_account extends CI_Controller{
 			$usernameQuery = $this->user_model->username_exists($uname);
 
 			if($studentQuery == true || $usernameQuery == true){
-				$this->load->view('create_users_account_view');
+				$this->load->view('home_view');
 					echo "Account already exists.";
 			}else {	
 				$this->load->model('user_model');
@@ -41,7 +41,7 @@ class Create_account extends CI_Controller{
 			}
 		}
 		//if User is a faculty
-		else if($_POST['usertype'] == 'F'){
+		else if($_POST['user_type'] == 'F'){
 			$enum = $_POST['employee_number'];
 			$uname = $_POST['username'];
 
@@ -49,7 +49,7 @@ class Create_account extends CI_Controller{
 			$usernameQuery = $this->user_model->username_exists($uname);
 
 			if($facultyQuery == true || $usernameQuery == true){
-				$this->load->view('create_users_account_view');
+				$this->load->view('home_view');
 				echo "Account already exists.";
 			}else {
 				$this->load->model('user_model');

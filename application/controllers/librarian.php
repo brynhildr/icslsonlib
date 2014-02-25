@@ -126,7 +126,7 @@ class Librarian extends CI_Controller{
 			redirect('librarian');
 	      
 	    $result = $this->librarian_model->get_reference($id);
-	    $data['reference_material'] = $result->result();
+	    $data['reference_materials'] = $result->result();
 	    $data['number_of_reference'] = $result->num_rows();
 	    $this->load->view('view_reference_view', $data);
 	}//end of function view_reference
@@ -148,7 +148,7 @@ class Librarian extends CI_Controller{
 
 		$queryObj = $this->librarian_model->get_reference($this->uri->segment(3));
 
-		$data['reference_material'] = $queryObj->result();
+		$data['reference_materials'] = $queryObj->result();
 		$data['number_of_reference'] = $queryObj->num_rows();
 
 		$this->load->view('edit_reference_view', $data);

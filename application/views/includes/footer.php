@@ -16,9 +16,9 @@
 	<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
 	<script src="<?= base_url().'js/delete_script.js'?>"></script>
 	<script src = "<?= base_url() . 'js/validate_script.js' ?>"></script>
-    <script src = "<?= base_url() . 'js/script.js' ?>"></script>
+    <script src = "<?= base_url() . 'js/scripts.js' ?>"></script>
     <script src = "<?= base_url() . 'js/bootstrap.min.js' ?>"></script>
-     <script src = "<?= base_url() . 'js/bootstrapjs' ?>"></script>
+     <script src = "<?= base_url() . 'js/bootstrap.js' ?>"></script>
        <script src="<?=base_url().'js/vendor/jquery-1.10.1.js'?>"></script>
         <script src="<?=base_url().'js/vendor/bootstrap.min.js'?>"></script>
 

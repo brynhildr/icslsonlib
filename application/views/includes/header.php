@@ -42,7 +42,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#"><img src="<?php echo base_url('logo.png');?>" width="150" height="45" id="logo"></a>
-		  
+      
           <?php if($this->session->userdata('userType') == 'A'){ ?>
           <!---start>
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -108,24 +108,24 @@
           </div>     
       </div>
       <?php }else{ ?>
-		 <!---start>
-		  <!-- Collect the nav links, forms, and other content for toggling -->
-			<div id="nav-in">
+     <!---start>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div id="nav-in">
         <form class="navbar-form navbar-left nav-in-search" role="search"action="http://localhost/icsls/index.php/search/search_rm" method="get" accept-charset="utf-8">
          <div class="form-group">
           <input type="text" name="keyword" placeholder="Search" value=""/>
            
           <input class="btn btn-default"type="submit" name="search1" value="Search"/>
         </form>
-		     <a href="#advanceSearch"data-toggle="modal"> <input type="submit" name="aSearch" class="btn btn-primary"  value="Advanced Search"/></a>
+         <a href="#advanceSearch"data-toggle="modal"> <input type="submit" name="aSearch" class="btn btn-primary"  value="Advanced Search"/></a>
        </div>
-		    
+        
  
 
         
-			</div>
+      </div>
         <?php } ?>
-		
+    
         </div>
       </div>
     </div>

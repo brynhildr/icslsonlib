@@ -7,9 +7,13 @@
 			$this->load->helper('url');
 			$this->load->helper('form');
 		}
-		/* Description: Calls the user_profile to get the User info from the database;
-		   Calls the user_book to get the User's reserved and waitlisted books; All of
-		   the info will be displayed in the User's profile. */
+		/**
+		 * Controller to get user's data in the DB
+		 *
+		 * @access	public
+		 * @param	none
+		 * @return	none
+		 */	
 		public function index(){
 			$data["title"] = "Profile - ICS Library System";
 
@@ -32,7 +36,7 @@
 			$user_type = $this->session->userdata('user_type');
 
 			if(isset($_POST['submit'])){ //if submit is clicked 
-				if($_POST["password"]!="") //if password was changed
+				if($this->input->post('password')!="") //if password was changed
 					$password=md5($_POST["password"]);
 				else { //if password is the same as before
 					$query = $this->user_model->user_profile($username, $id);
@@ -41,21 +45,21 @@
 					//}
 				}
 
-				if($this->user_model->username_exists($_POST["username"])){
+				if($this->user_model->username_exists($this->input->post("username"))){
 					$username = $this->session->userdata('username'); //get username from session
 					$data['username_exist'] = "Username already exist!";
 				}else{
-					$username =$_POST["username"];
+					$username =$this->input->post("username");
 					$data['username_exist'] = "";
 				}	
 
-				$college_address=$_POST["college_address"];
-				$email_address=$_POST["email_address"];
-				$contact_number=$_POST["contact_number"];
+				$college_address=$this->input->post("college_address");
+				$contact_number=$this->input->post("contact_number");
+				
 			}
 			
 			//update user profile
-			$this->user_model->user_update_profile($id, $username, $password, $college_address, $email_address, $contact_number);
+			$this->user_model->user_update_profile($id, $username, $password, $college_address, $contact_number);
 			$data["title"] = "Profile - ICS Library System";
 			
 			//reset user data on session
@@ -84,7 +88,7 @@
 			$id = $this->session->userdata('id');
 			// if "Cancel Reservation" was clicked
 			if(isset($_POST['cancel_reserve'])){
-				$cancelStatus = $this->user_model->cancel_reserve_reference_material($referenceId, $id);
+				$cancelStatus = $this->user_model->cancel_reserve_reference_materials($referenceId, $id);
 				$data["title"] = "Profile - ICS Library System";
 
 				$username = $this->session->userdata('username'); // get username from session
@@ -98,7 +102,7 @@
 			}
 			// if "Cancel Waitlist" was clicked
 			if(isset($_POST['cancel_waitlist'])){
-				$cancelStatus = $this->user_model->cancel_waitlist_reference_material($referenceId, $id);
+				$cancelStatus = $this->user_model->cancel_waitlist_reference_materials($referenceId, $id);
 				$data["title"] = "Profile - ICS Library System";
 
 				$username = $this->session->userdata('username'); // get username from session
