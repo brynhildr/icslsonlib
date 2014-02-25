@@ -22,12 +22,12 @@
 		                <td><input type = "text" name = "<?= 'isbn' . $i?>" value = "<?= $field['ISBN'] ?>"></td>
 		                <td>
 							<select name = "<?= 'category' . $i?>" required>
-								<option value = "B" selected>Book</option>
-								<option value = "M">Magazine</option>
-								<option value = "T">Thesis</option>
-								<option value = "S">Special Problem</option>
-								<option value = "C">CD/DVD</option>
-								<option value = "J">Journal</option>
+								<option value = "B" <?php echo (strcasecmp($field['CATEGORY'], "B") == 0 OR strcasecmp($field['CATEGORY'], "Book") == 0) ? 'selected' : ''; ?>>Book</option>
+								<option value = "M" <?php echo (strcasecmp($field['CATEGORY'], "M") == 0 OR strcasecmp($field['CATEGORY'], "Magazine") == 0) ? 'selected' : ''; ?>>Magazine</option>
+								<option value = "T" <?php echo (strcasecmp($field['CATEGORY'], "T") == 0 OR strcasecmp($field['CATEGORY'], "Thesis") == 0) ? 'selected' : ''; ?>>Thesis</option>
+								<option value = "S" <?php echo (strcasecmp($field['CATEGORY'], "S") == 0 OR strcasecmp($field['CATEGORY'], "SP") == 0 OR strcasecmp($field['CATEGORY'], "Special Problem") == 0) ? 'selected' : ''; ?>>Special Problem</option>
+								<option value = "C" <?php echo (strcasecmp($field['CATEGORY'], "C") == 0 OR strcasecmp($field['CATEGORY'], "CD") == 0) ? 'selected' : ''; ?>>CD/DVD</option>
+								<option value = "J" <?php echo (strcasecmp($field['CATEGORY'], "J") == 0 OR strcasecmp($field['CATEGORY'], "Journal") == 0) ? 'selected' : ''; ?>>Journal</option>
 							</select> 
 		                </td>
 		                <td><input type = "text" name = "<?= 'description' . $i?>" value = "<?= $field['DESCRIPTION'] ?>"></td>
@@ -35,8 +35,8 @@
 		                <td><input type = "number" name = "<?= 'year' . $i?>" value = "<?= $field['PUBLICATION_YEAR'] ?>" min="1900" max="2014"></td>
 		                <td>
 							<select name = "<?= 'access_type' . $i?>" required>
-								<option value = "S" selected>Student</option>
-								<option value = "F">Faculty</option>
+								<option value = "S" <?php echo (strcasecmp($field['ACCESS_TYPE'], "S") == 0 OR strcasecmp($field['ACCESS_TYPE'], "Student") == 0) ? 'selected' : ''; ?>>Student</option>
+								<option value = "F" <?php echo (strcasecmp($field['ACCESS_TYPE'], "F") == 0 OR strcasecmp($field['ACCESS_TYPE'], "Faculty") == 0) ? 'selected' : ''; ?>>Faculty</option>
 							</select>
 		                </td>
 		                <td><input type = "text" name = "<?= 'course_code' . $i?>" value = "<?= $field['COURSE_CODE']?>" required></td>

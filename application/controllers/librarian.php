@@ -1,5 +1,5 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-<?php
 /**
  * Controller for librarian-specific modules
  *
@@ -44,8 +44,34 @@ class Librarian extends CI_Controller{
 	 *
 	 * @access public
 	*/
-	public function search_reference_index(){
+	public function search_reference_index($offset = 0, $per_page = 20){
 		$data['title'] = "Librarian Search Reference - ICS Library System";
+
+		$data['references'] = $this->librarian_model->get_all_references_part($offset, $per_page)->result();
+		$data['numResults'] = $this->librarian_model->get_all_references()->num_rows();
+		
+		$this->load->library('pagination');
+		$config['base_url'] = base_url('index.php/librarian/display_search_results?
+			all=TRUE');
+		$config['total_rows'] = $data['numResults'];
+		$config['per_page'] = $per_page; 
+		$config['page_query_string'] = TRUE;
+		$config['full_tag_open'] = '<div class="pagination_table"><ul class="pagination">';
+		$config['full_tag_close'] = '</ul></div>';
+		$config['prev_link'] = '&lt; Prev';
+		$config['prev_tag_open'] = '<li>';
+		$config['prev_tag_close'] = '</li>';
+		$config['next_link'] = 'Next &gt;';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['cur_tag_open'] = '<li class="active"><a href="#">';
+		$config['cur_tag_close'] = '</a></li>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		$config['first_link'] = FALSE;
+		$config['last_link'] = FALSE;
+		$this->pagination->initialize($config);
+
 		$this->load->view('search_reference_view', $data);
 	}//end of function search_reference_index
 
@@ -58,38 +84,68 @@ class Librarian extends CI_Controller{
 	public function display_search_results($query_id = 0, $offset = 0){
 		$data['title'] = 'Librarian Search Reference - ICS Library System';
 
-		$query_array = array(
-			'category' => $this->input->get('selectCategory'),
-			'text' => htmlspecialchars($this->input->get('inputText')),
-			'sortCategory' => $this->input->get('selectSortCategory'),
-			'row' => $this->input->get('selectRows'),
-			'accessType' => $this->input->get('selectAccessType'),
-			'orderBy' => $this->input->get('selectOrderBy'),
-			'deletion' => $this->input->get('checkDeletion'),
-			'match' => $this->input->get('radioMatch')
-		);
-
-		//Do not continue if user tried to make the database retrieval fail by editing URL's GET 
-		foreach($query_array as $element):
-			if($element === FALSE)
-				redirect('librarian/search_reference_index');
-		endforeach;
-
-		$offset = $this->input->get('per_page') ? $this->input->get('per_page') : 0;
-
-		$data['total_rows'] = $this->librarian_model->get_number_of_rows($query_array);
-
-		$results = $this->librarian_model->get_search_reference($query_array, $offset);
-
-		$data['references'] = $results->result();
-		$data['numResults'] = $results->num_rows();
-
-		/* Initialize the pagination class */
-		
 		$this->load->library('pagination');
-		$config['base_url'] = base_url() . "index.php/librarian/display_search_results?selectCategory={$_GET['selectCategory']}&inputText={$_GET['inputText']}&radioMatch={$_GET['radioMatch']}&selectSortCategory={$_GET['selectSortCategory']}&selectOrderBy={$_GET['selectOrderBy']}&selectAccessType={$_GET['selectAccessType']}&checkDeletion={$_GET['checkDeletion']}&selectRows={$_GET['selectRows']}";// . $query_id;
-		$config['total_rows'] = $data['total_rows'];
-		$config['per_page'] = $query_array['row']; 
+
+		//Retrieve all references
+		if(isset($_GET['getAll']) OR $this->input->get('all') == 'TRUE'){
+			$_GET['all'] = 'TRUE';
+
+			$offset = ($this->input->get('per_page')) ? $this->input->get('per_page') : 0;
+			$per_page = 20;
+
+			$data['references'] = $this->librarian_model->get_all_references_part($offset, $per_page)->result();
+			$data['numResults'] = $this->librarian_model->get_all_references()->num_rows();
+
+			$config['base_url'] = base_url('index.php/librarian/display_search_results?
+				all=TRUE');
+			$config['total_rows'] = $data['numResults'];
+			$config['per_page'] = 20;
+
+		}
+
+		//Search using some search criteria
+		else{
+			$query_array = array(
+				'category' => htmlspecialchars($this->input->get('selectCategory')),
+				'text' => htmlspecialchars($this->input->get('inputText')),
+				'sortCategory' => htmlspecialchars($this->input->get('selectSortCategory')),
+				'row' => htmlspecialchars($this->input->get('selectRows')),
+				'accessType' => htmlspecialchars($this->input->get('selectAccessType')),
+				'orderBy' => htmlspecialchars($this->input->get('selectOrderBy')),
+				'deletion' => htmlspecialchars($this->input->get('checkDeletion')),
+				'match' => htmlspecialchars($this->input->get('radioMatch'))
+			);
+
+			//Do not continue if user tried to make the database retrieval fail by editing URL's GET 
+			foreach($query_array as $element):
+				if($element === FALSE)
+					redirect('librarian/search_reference_index');
+			endforeach;
+
+			$offset = $this->input->get('per_page') ? $this->input->get('per_page') : 0;
+
+			$data['total_rows'] = $this->librarian_model->get_number_of_rows($query_array);
+
+			$results = $this->librarian_model->get_search_reference($query_array, $offset);
+
+			$data['references'] = $results->result();
+			$data['numResults'] = $results->num_rows();
+
+			/* Initialize the pagination class */
+			$config['base_url'] = base_url("index.php/librarian/display_search_results?
+				selectCategory={$_GET['selectCategory']}
+				&inputText={$_GET['inputText']}
+				&all={$_GET['all']}
+				&radioMatch={$_GET['radioMatch']}
+				&selectSortCategory={$_GET['selectSortCategory']}
+				&selectOrderBy={$_GET['selectOrderBy']}
+				&selectAccessType={$_GET['selectAccessType']}
+				&checkDeletion={$_GET['checkDeletion']}
+				&selectRows={$_GET['selectRows']}");
+			$config['total_rows'] = $data['total_rows'];
+			$config['per_page'] = $query_array['row'];	
+		}
+
 		$config['page_query_string'] = TRUE;
 		$config['full_tag_open'] = '<div class="pagination_table"><ul class="pagination">';
 		$config['full_tag_close'] = '</ul></div>';
@@ -123,11 +179,15 @@ class Librarian extends CI_Controller{
 	public function view_reference(){
 		$id = $this->uri->segment(3);
 		if($id === FALSE)
-			redirect('librarian');
+			redirect('librarian/search_reference_index');
 	      
 	    $result = $this->librarian_model->get_reference($id);
-	    $data['reference_materials'] = $result->result();
+	    $data['reference_material'] = $result->result();
 	    $data['number_of_reference'] = $result->num_rows();
+
+	    $data['transactions'] = $this->librarian_model->get_transactions($id)->result();
+	    $data['numberOfTransactions'] = $this->librarian_model->get_transactions($id)->num_rows();
+
 	    $this->load->view('view_reference_view', $data);
 	}//end of function view_reference
 
@@ -148,7 +208,7 @@ class Librarian extends CI_Controller{
 
 		$queryObj = $this->librarian_model->get_reference($this->uri->segment(3));
 
-		$data['reference_materials'] = $queryObj->result();
+		$data['reference_material'] = $queryObj->result();
 		$data['number_of_reference'] = $queryObj->num_rows();
 
 		$this->load->view('edit_reference_view', $data);
@@ -179,7 +239,7 @@ class Librarian extends CI_Controller{
 		$total_stock = htmlspecialchars(mysql_real_escape_string($this->input->post('total_stock')));
 
 		//DO NOT TRUST the user's input. Server-side input validation
-		/*if($total_stock <= 0)
+		if($total_stock <= 0)
 			redirect('librarian/edit_reference_index/' . $id);			
 		if(! in_array(strtoupper($category), array('B', 'S', 'C', 'J', 'M', 'T')))
 			redirect('librarian/edit_reference_index/' . $id);
@@ -187,7 +247,7 @@ class Librarian extends CI_Controller{
 			redirect('librarian/edit_reference_index/' . $id);
 		if(preg_match("/\A[A-Z]{2,3}\d{2,3}\z/", $course_code) === FALSE)
 			redirect('librarian/edit_reference_index/' . $id);
-		*/
+
 		//Store the input from user to be passed on the model
 	    $query_array = array(
 	       	'id' => $id,
@@ -233,12 +293,13 @@ class Librarian extends CI_Controller{
 				 
 			endif;
 		}
-		
+
 		if(count($cannotBeDeleted) > 0){
 			$data['forDeletion'] = $this->librarian_model->get_selected_books($cannotBeDeleted);
 			$this->load->view('for_deletion_view',$data);
 		}
-		redirect(base_url() . 'index.php/librarian/search_reference_index','refresh');
+		else
+			redirect(base_url('index.php/librarian/search_reference_index'),'refresh');
     }//end of function delete_reference
 	
 	/**
@@ -263,7 +324,7 @@ class Librarian extends CI_Controller{
 		endforeach;
 		
 		$data['query'] = $this->librarian_model->get_other_books($idready);	
-		redirect( base_url() . 'index.php/librarian','refresh');
+		redirect( base_url('index.php/librarian/search_reference_index'),'refresh');
 	}//end of function change_forDeletion
 
 	/* **************************************** END OF DELETE REFERENCE MODULE **************************************** */
@@ -305,7 +366,6 @@ class Librarian extends CI_Controller{
 	            'FOR_DELETION' => 'F'    
         	);
 			$data['TOTAL_AVAILABLE'] = $data['TOTAL_STOCK'];
-			$data['TOTAL_IN_STOCK'] = $data['TOTAL_STOCK'];
 
 			//Setting empty fields that can be NULL to NULL
 			if($data['ISBN'] == '')
@@ -405,7 +465,6 @@ class Librarian extends CI_Controller{
 					'FOR_DELETION' => 'F'    
 				);
 				$data[$i]['TOTAL_AVAILABLE'] = $data[$i]['TOTAL_STOCK'];
-				$data[$i]['TOTAL_IN_STOCK'] = $data[$i]['TOTAL_STOCK'];
 		    }
 
 	    	$this->librarian_model->add_multipleData($data, $count);
@@ -460,10 +519,11 @@ class Librarian extends CI_Controller{
 	*/
 	public function claim_return(){
 		$referenceId = $this->uri->segment(3);
-		$flag = $this->uri->segment(4);
+		$userId = $this->uri->segment(4);
+		$flag = $this->uri->segment(5);
 
 		if(intval($referenceId) > 0)
-			$this->librarian_model->claim_return_reference($referenceId, $flag);
+			$this->librarian_model->claim_return_reference($referenceId, $userId, $flag);
 
 		redirect('librarian/view_reference/' . $referenceId);
 	}

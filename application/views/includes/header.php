@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="<?php echo base_url();?>'css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo base_url('css/bootstrap.min.css');?>">
         <style>
             body {
                 padding-top: 50px;
@@ -19,13 +19,13 @@
         </style>
   
         <link rel="stylesheet" type='text/css' href="<?php echo base_url('css/bootstrap-theme.min.css');?>">
-        <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/bootstrap.css');?>">
+        <link rel="stylesheet" type='text/css' href="<?php echo base_url('css/bootstrap.css');?>">
        
-       <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/main.css');?>">
-       <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/main_login.css');?>">
-        <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/template.css');?>">
-        <link rel="stylesheet" type='text/css'href="<?php echo base_url('css/profile_view.css');?>">
-        <script src="<?base_url().'js/vendor/modernizr-2.6.2-respond-1.1.0.min.js'?>"></script>
+       <link rel="stylesheet" type='text/css' href="<?php echo base_url('css/main.css');?>">
+       <link rel="stylesheet" type='text/css' href="<?php echo base_url('css/main_login.css');?>">
+        <link rel="stylesheet" type='text/css' href="<?php echo base_url('css/template.css');?>">
+        <link rel="stylesheet" type='text/css' href="<?php echo base_url('css/profile_view.css');?>">
+        <script src="<?php echo base_url('js/vendor/modernizr-2.6.2-respond-1.1.0.min.js'); ?>"></script>
        
     </head>
     <body>
@@ -42,7 +42,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#"><img src="<?php echo base_url('logo.png');?>" width="150" height="45" id="logo"></a>
-      
+		  
           <?php if($this->session->userdata('userType') == 'A'){ ?>
           <!---start>
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -52,7 +52,7 @@
               <li class="active">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <?=$this->session->userdata('username')?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="<?=base_url().'index.php/borrower/view_borrower_profile_index'?>">View Profile</a></li>
+                  <li><a href="<?=base_url('index.php/borrower/view_borrower_profile_index') ?>">View Profile</a></li>
                   <li><?=anchor('administrator/search_accounts', 'Search Accounts')?></li>
                   <li><?=anchor('administrator/create_account', 'Add Account')?></li>
                   <li><?=anchor('logout', 'Logout')?></li>
@@ -72,17 +72,17 @@
               <li class="active">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <?=$this->session->userdata('username')?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">View Profile</a></li>
-                   <li><a href="<?=base_url().'index.php/librarian/search_reference_index'?>">Search References</a></li>
+                  <li><a href="<?= base_url('index.php/librarian/view_profile') ?>" >View Profile</a></li>
+                   <li><a href="<?=base_url('index.php/librarian/search_reference_index') ?>">Search References</a></li>
                    <li class="dropdown-submenu">
-                    <a tabindex="-1" href="#">Add Reference</a>
+                    <a tabindex="-1" href="<?= site_url('librarian/add_reference') ?>">Add Reference</a>
                         <ul class="dropdown-menu">
                              <li> <a href="<?= site_url('librarian/add_reference') ?>">View Add Reference Form</a></li>
                              <li><a href="<?= site_url('librarian/file_upload') ?>">File Upload</a></li>
                         </ul>
                     </li>
-                  <li><a href="<?=base_url().'index.php/librarian/view_report_index'?>">Generate Report</a></li>
-                  <li><a href="<?=base_url().'index.php/logout'?>">Logout</a></li>
+                  <li><a href="<?=base_url('index.php/librarian/view_report_index') ?>">Generate Report</a></li>
+                  <li><a href="<?=base_url('index.php/logout') ?>">Logout</a></li>
                 </ul>
               </li>
             </ul>
@@ -98,34 +98,34 @@
               <li class="active">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->session->userdata('username')?><b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="<?=base_url().'index.php/profile'?>">View Profile</a></li>
-                  <li><a href="<?=base_url().'index.php/search'?>">Search References</a></li>
-                  <li><a href="<?=base_url().'index.php/cart_controller/view_cart'?>">View Cart</a></li>
-                  <li><a href="<?=base_url().'index.php/logout'?>">Logout</a></li>
+                  <li><a href="<?= base_url('index.php/profile') ?>">View Profile</a></li>
+                  <li><a href="<?= base_url('index.php/search') ?>">Search References</a></li>
+                  <li><a href="<?= base_url('index.php/cart_controller/view_cart') ?>">View Cart</a></li>
+                  <li><a href="<?= base_url('index.php/logout') ?>">Logout</a></li>
                 </ul>
               </li>
             </ul>
           </div>     
       </div>
       <?php }else{ ?>
-     <!---start>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div id="nav-in">
+		 <!---start>
+		  <!-- Collect the nav links, forms, and other content for toggling -->
+			<div id="nav-in">
         <form class="navbar-form navbar-left nav-in-search" role="search"action="http://localhost/icsls/index.php/search/search_rm" method="get" accept-charset="utf-8">
          <div class="form-group">
           <input type="text" name="keyword" placeholder="Search" value=""/>
            
           <input class="btn btn-default"type="submit" name="search1" value="Search"/>
         </form>
-         <a href="#advanceSearch"data-toggle="modal"> <input type="submit" name="aSearch" class="btn btn-primary"  value="Advanced Search"/></a>
+		     <a href="#advanceSearch"data-toggle="modal"> <input type="submit" name="aSearch" class="btn btn-primary"  value="Advanced Search"/></a>
        </div>
-        
+		    
  
 
         
-      </div>
+			</div>
         <?php } ?>
-    
+		
         </div>
       </div>
     </div>

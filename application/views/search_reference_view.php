@@ -12,6 +12,7 @@
          <div class="col-sm-offset-1" id="search_top">
 
     <form action = "<?= base_url() . 'index.php/librarian/display_search_results' ?>" method = 'GET'>
+
       <select  class="dropdown"name = 'selectCategory'>
        <option value = 'title' <?php echo ($this->input->get('selectCategory') == 'title') ? "selected" : ""; ?>>Title</option>
        <option value = 'author' <?php echo ($this->input->get('selectCategory') == 'author') ? "selected" : ""; ?>>Author</option>
@@ -24,11 +25,14 @@
   
       <input type = 'submit' class="btn btn-primary" name = 'submit' value = 'Submit' />
       <a href="#advanceSearch"data-toggle="modal"> <input type="submit" name="aSearch" class="btn btn-primary"  value="Advanced Search"/></a>
+      <br />
+      <input type = 'hidden' name = 'all' value = 'FALSE' />
+      <input type = 'submit' class="btn btn-primary" name = 'getAll' value = 'Display All References' />
   </div>
   		
 
-  		 <div id="advanceSearch" class="modal fade in" role="dialog">  
-<div class="modal-dialog">  
+  	<div id="advanceSearch" class="modal fade in" role="dialog">  
+		<div class="modal-dialog">  
           <div class="modal-content">
             <div class="modal-header">  
               <a class="close" data-dismiss="modal">&times;</a>
@@ -36,14 +40,14 @@
             </div><!--modal header-->
             <div class="modal-body">
                 <br />
-                   <label for = 'likeRadio'>Like</label>
+                   <label class = "btn btn-primary" for = 'likeRadio'>Like</label>
                    <input type = 'radio' id = 'likeRadio' name = 'radioMatch' value = 'like' <?php echo ($this->input->get('radioMatch') != 'match') ? "checked" : ""; ?> />
-                   <label for = 'matchRadio'>Exact Match</label>
+                   <label class = "btn btn-primary" for = 'matchRadio'>Exact Match</label>
                   <input type = 'radio' id = 'matchRadio' name = 'radioMatch' value = 'match' <?php echo ($this->input->get('radioMatch') == 'match') ? "checked" : ""; ?> />
                   <br />
 
               <label><strong>Sort By:</strong></label>
-      <label for = 'selectSortCategory'>Category:</label>
+      <label class = "btn btn-primary" for = 'selectSortCategory'>Category:</label>
       <select id = 'selectSortCategory' name = 'selectSortCategory'>
         <option value = 'title' <?php echo ($this->input->get('selectSortCategory') == 'title') ? "selected" : ""; ?>>Title</option>
         <option value = 'author' <?php echo ($this->input->get('selectSortCategory') == 'author') ? "selected" : ""; ?>>Author</option>
@@ -52,7 +56,7 @@
         <option value = 'times_borrowed' <?php echo ($this->input->get('selectSortCategory') == 'times_borrowed') ? "selected" : ""; ?>>Number of times borrowed</option>
         <option value = 'total_stock' <?php echo ($this->input->get('selectSortCategory') == 'total_stock') ? "selected" : ""; ?>>Total stock</option>
       </select>
-      <label for = 'selectOrderBy'>Order:</label>
+      <label class = "btn btn-primary" for = 'selectOrderBy'>Order:</label>
       <select id = 'selectOrderBy' name = 'selectOrderBy'>
         <option value = 'ASC' <?php echo ($this->input->get('selectOrderBy') == 'ASC') ? "selected" : ""; ?>>Ascending</option>
         <option value = 'DESC' <?php echo ($this->input->get('selectOrderBy') == 'DESC') ? "selected" : ""; ?>>Descending</option>
@@ -61,14 +65,14 @@
       <br />
       <label><strong>Search only: </strong></label>
       <br />
-      <label for = 'selectAccessType'>Access Type: </label>
-      <select id = 'selectAccessType' name = 'selectAccessType'>
+      <label class = "btn btn-primary" for = 'selectAccessType'>Access Type: </label>
+      <select class = "btn btn-primary" id = 'selectAccessType' name = 'selectAccessType'>
         <option value = 'N' <?php echo ($this->input->get('selectAccessType') == 'N') ? "selected" : ""; ?>></option>
         <option value = 'F' <?php echo ($this->input->get('selectAccessType') == 'F') ? "selected" : ""; ?>>Faculty</option>
         <option value = 'S' <?php echo ($this->input->get('selectAccessType') == 'S') ? "selected" : ""; ?>>Student</option>
       </select>
       <br />
-      <label for = 'del'>Status</label>
+      <label class = "btn btn-primary" for = 'del'>Status</label>
       <select id = 'del' name = 'checkDeletion'>
         <option value = 'N' <?php echo ($this->input->get('checkDeletion') == 'N') ? "selected" : ""; ?>></option>
         <option value = 'T' <?php echo ($this->input->get('checkDeletion') == 'T') ? "selected" : ""; ?>>To be Removed</option>
@@ -76,7 +80,7 @@
       </select>
 
       <br />
-      <label for = 'selectRows'>Rows per page</label>
+      <label class = "btn btn-primary" for = 'selectRows'>Rows per page</label>
       <select id  = 'selectRows' name = 'selectRows'>
         <option value = '10' <?php echo ($this->input->get('selectRows') == '10') ? "selected" : ""; ?>>10</option>
         <option value = '20' <?php echo ($this->input->get('selectRows') == '20') ? "selected" : ""; ?>>20</option>
@@ -94,10 +98,6 @@
 
     </form>
     <!-- End of Form for Searching Reference -->
-
-    <!-- Display table for references already for deletion (complete stock) -->
-
-    <!-- END -->
  
 		<!-- Display table for references not ready or not scheduled for deletion -->
 		<table id = 'booktable' border = '1'></table>
@@ -108,10 +108,11 @@
 				<table id = 'booktable' border = "1" cellpadding = "5" cellspacing = "2">
 					<thead>
 						<tr>
-							<th><button type = "button" class="btn btn-primary"  id = "markAll" value = "markAll" formaction="<?= base_url() . 'index.php/librarian/claim_return/' ?>" /><span class="glyphicon glyphicon-check"></span></button>
-				<button type = "submit" class="btn btn-primary" value = "Delete Selected" onclick = "return confirmDelete()" /> <span class="glyphicon glyphicon-trash"></span> </button>
-				<button type = "submit" class="btn btn-primary" value = "Edit Selected" formaction="<?php echo base_url('index.php/librarian/claim_return'); ?>" method="get" /> <span class="glyphicon glyphicon-edit"></span></button>
-				<br /></th>
+							<th>
+								<button type = "button" class="btn btn-primary"  id = "markAll" value = "unmarked"  /><span class="glyphicon glyphicon-check"></span></button>
+								<button type = "submit" class="btn btn-primary" value = "Delete Selected" onclick = "return confirmDelete()" /> <span class="glyphicon glyphicon-trash"></span> </button>
+								<br />
+							</th>
 							<th>Row</th>
 							<th>Course Code</th>
 							<th><center>Title</center></th>
@@ -178,7 +179,7 @@
 				<div id="paginationStyle"><?= $this->pagination->create_links() ?></div>
 			
 			
-				<?= 'Number of rows retrieved: ' . $total_rows ?>
+				<?= 'Number of rows retrieved: ' . $numResults ?>
 				
 			</form>
 		<?php } ?>

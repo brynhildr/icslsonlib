@@ -1,7 +1,6 @@
 //Confirm to Delete the selected books
 function confirmDelete(){
 	var noOfBooksToDelete = $('input[name = "ch[]"]:checked').length;
-	alert(noOfBooksToDelete);
 	if(noOfBooksToDelete > 0){
 		var option = confirm("Are you Sure?");
 		if(option == true){		
@@ -50,18 +49,18 @@ function confirmChangeForDeletion(){
 	
 //Mark All checkboxes when choosing
 $('#markAll').click(function (){
-	var buttonText = $('#markAll').text();
-	if(buttonText === 'Mark All'){
+	var buttonVal = $('#markAll').val();
+	if(buttonVal === 'unmarked'){
 		$('input[name="ch[]"]').each(function(){
 			$(this).prop('checked', true);
 		});
-		$('#markAll').text('Unmark All');
+		$('#markAll').val('marked');
 	}
-	else if(buttonText === 'Unmark All'){
+	else if(buttonVal === 'marked'){
 		$('input[name="ch[]"]').each(function(){
 			$(this).prop('checked', false);
 		});
-		$('#markAll').text('Mark All');
+		$('#markAll').val('unmarked');
 	}
 });
 

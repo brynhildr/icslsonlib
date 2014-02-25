@@ -1,4 +1,5 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  * Model for Librarian-specific modules
  *
@@ -17,6 +18,23 @@ class Librarian_model extends CI_Model{
 	}
 
 	/**
+	 * 
+	*/
+	public function get_all_references(){
+		return $this->db->get('reference_materials');
+	}
+
+	/**
+	 * Retrieves ALL references starting within offset ending with per_page
+	 *
+	 * @access 	public
+	 * @return 	
+	*/
+	public function get_all_references_part($offset, $per_page){
+		return $this->db->get('reference_materials', $per_page, $offset);
+	}//end of function get_all_references
+
+	/**
 	 * Returns the number of rows affected by the user's search input
 	 *
 	 * @access 	public
@@ -30,8 +48,6 @@ class Librarian_model extends CI_Model{
 			redirect('librarian/search_reference_index');
 		if(! in_array($query_array['sortCategory'], $sortCategoryArray))
 			redirect('librarian/search_reference_index');
-		//if($query_array['category'] != 'title' OR $query_array['category'] != 'author' OR $query_array['category'] != 'isbn' OR $query_array['category'] != 'code_code' OR $query_array['category'] != 'publisher')
-		//	redirect('librarian/search_reference_index');
 
 		if($query_array['text'] == '')
 			redirect('librarian/search_reference_index');
@@ -62,7 +78,7 @@ class Librarian_model extends CI_Model{
 	 *
 	 * @access 	public
 	 * @param 	array 	$query_array,
-	 * 			int 	$start
+	 * @param 	int 	$start
 	 * @return 	object
 	*/
 	public function get_search_reference($query_array, $start){
@@ -118,7 +134,8 @@ class Librarian_model extends CI_Model{
 				return -1;
 			}
 			else{
-				return $book_id;
+				if($row->for_deletion === 'F')
+					return $book_id;
 			}	
 		endforeach;
 		
@@ -135,7 +152,7 @@ class Librarian_model extends CI_Model{
 		$query = $this->db->query($sql);
 		return $query;
 		
-	}//end of functionget_ready_for_deletion
+	}//end of function get_ready_for_deletion
 	
 	//get the remaining books
 	function get_other_books($idready){
@@ -275,32 +292,52 @@ class Librarian_model extends CI_Model{
 	 *
 	 * @access 	public
 	 * @param 	int 	$referenceId
+	 *			int 	$userId
 	 *			char 	$flag
 	*/
-	public function claim_return_reference($referenceId, $flag){
+	public function claim_return_reference($referenceId, $userId, $flag){
 		$updateStatus = FALSE; 
 		
 		//Get stock ad stock within library
-		$stockData = $this->db->query("SELECT total_stock, total_in_stock FROM reference_materials WHERE id = '{$referenceId}'")->result();
+		$stockData = $this->db->query("SELECT total_stock, total_available FROM reference_materials WHERE id = '{$referenceId}'")->result();
 		foreach($stockData as $data){
-			$newValue = $data->total_in_stock;
+			$newValue = $data->total_available;
 			$ceilingValue = $data->total_stock;
 		}
-
+		//Borrow a reference material
 		if($flag === 'C' && $newValue > 0){
-			$newValue--;
-			$updateStatus = TRUE;
+			$dateBorrowed = date('Y-m-d');
+		 	$dateParts = explode('-', $dateBorrowed);
+		 	$borrowDue = date('Y-m-d', mktime(0,0,0, $dateParts[1], $dateParts[2] + 3, $dateParts[0]));
+
+			$this->db->query("UPDATE transactions 
+				SET date_borrowed = '{$dateBorrowed}', borrow_due_date = '{$borrowDue}'
+				WHERE reference_material_id = '{$referenceId}'
+				AND borrower_id = '{$userId}'");
 		}
+			
+		//Return a reference material
 		elseif ($flag === 'R' && $newValue < $ceilingValue){
 			$newValue++;
-			$updateStatus = TRUE;
+			$this->db->query("UPDATE reference_materials SET total_available = '{$newValue}' WHERE id = '{$referenceId}'");
+			$this->db->query("UPDATE transactions SET date_returned = date('Y-m-d')
+				WHERE reference_material_id = '{$referenceId}'
+				AND borrower_id = '{$userId}'");
 		}
-		
-		if($updateStatus === TRUE){
-			$this->db->query("UPDATE reference_materials SET total_in_stock = '{$newValue}' WHERE id = '{$referenceId}'");
-			$this->db->query("UPDATE transactions SET date_borrowed = date('Y-m-d'), borrow_due_date = ");
-		}
-	}
+			
+			//
+	}//end of function claim_return_reference
+
+	public function get_transactions($referenceId){
+		$this->db->select('u.first_name, u.middle_name, u.last_name, u.user_type,
+			t.reference_material_id, t.waitlist_rank, t.date_waitlisted, t.date_reserved,
+			t.reservation_due_date, t.date_borrowed, t.borrow_due_date, t.date_returned')
+			->from('users u, transactions t')
+			->where('t.borrower_id = u.id');
+			//->where('t.date_returned = NULL);
+
+		return $this->db->get();
+	}//end of function get_transactions
 
 }//end of Librarian_model
 
